@@ -1,0 +1,29 @@
+{
+  "name": "rickypassword.com",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "20.x" },
+  "scripts": {
+    "start": "node server.js",
+    "dev:server": "nodemon server.js",
+    "dev:client": "npm --prefix frontend run dev",
+    "build:client": "npm --prefix frontend run build",
+    "preview:client": "npm --prefix frontend run preview",
+    "dev": "concurrently -k \"npm:dev:server\" \"npm:dev:client\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.1.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "nodemailer": "^7.0.6",
+    "resend": "^6.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.0"
+  }
+}
