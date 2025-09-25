@@ -1,28 +1,27 @@
 // src/pages/NewsPost.jsx
-import { useMemo } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { NEWS } from '../data/news'
+import { useMemo } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { NEWS } from '../data/news';
 
 const fmtDate = (d) =>
   new Date(d).toLocaleDateString(undefined, {
     weekday: 'short', month: 'short', day: '2-digit', year: 'numeric'
-  })
+  });
 
-/** Article body block */
-function Article({ post, showTitle = true }) {
-  if (!post) return null
-  const paragraphs = post.content ? post.content.split(/\n{2,}/g) : []
-  const hasGallery = Array.isArray(post.images) && post.images.length > 0
+/** Single full article block (same layout for all) */
+function Article({ post, first = false }) {
+  const paragraphs = post.content ? post.content.split(/\n{2,}/g) : [];
+  const hasGallery = Array.isArray(post.images) && post.images.length > 0;
 
   return (
     <article style={{ marginBottom: 36 }}>
-      {/* Optional inline title (used for “more posts” section) */}
-      {showTitle && (
-        <>
-          <h2 style={{ margin: '0 0 6px', fontWeight: 800, fontSize: 22 }}>{post.title}</h2>
-          <div style={{ opacity: .7, marginBottom: 18 }}>{fmtDate(post.date)}</div>
-        </>
+      {/* Title styles: big h1 for first, smaller for the rest */}
+      {first ? (
+        <h1 className="h2" style={{ margin: '8px 0 6px' }}>{post.title}</h1>
+      ) : (
+        <h2 style={{ margin: '0 0 6px', fontWeight: 800, fontSize: 22 }}>{post.title}</h2>
       )}
+      <div style={{ opacity: .7, marginBottom: 18 }}>{fmtDate(post.date)}</div>
 
       {post.cover_url ? (
         <img
@@ -30,7 +29,6 @@ function Article({ post, showTitle = true }) {
           alt=""
           style={{ width: '100%', maxHeight: 420, objectFit: 'cover', borderRadius: 14, marginBottom: 18 }}
           loading="lazy"
-          decoding="async"
         />
       ) : null}
 
@@ -40,6 +38,7 @@ function Article({ post, showTitle = true }) {
         ))}
       </div>
 
+      {/* Small square gallery like Music (optional) */}
       {hasGallery && (
         <>
           <h3 style={{ margin: '0 0 12px', fontWeight: 800, fontSize: 18 }}>Gallery</h3>
@@ -47,16 +46,16 @@ function Article({ post, showTitle = true }) {
             style={{
               display: 'grid',
               gap: 12,
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 260px))',
+              justifyContent: 'start'
             }}
           >
             {post.images.map((src, idx) => (
-              <figure key={idx} style={{ margin: 0 }}>
+              <figure key={idx} style={{ margin: 0, width: '100%' }}>
                 <img
                   src={src}
                   alt=""
                   loading="lazy"
-                  decoding="async"
                   style={{
                     width: '100%',
                     aspectRatio: '1 / 1',
@@ -71,69 +70,52 @@ function Article({ post, showTitle = true }) {
         </>
       )}
     </article>
-  )
+  );
 }
 
 export default function NewsPost() {
-  const { slug } = useParams()
+  const { slug } = useParams();
 
   // All posts newest → oldest
   const sorted = useMemo(
     () => [...NEWS].sort((a, b) => new Date(b.date) - new Date(a.date)),
     []
-  )
+  );
 
-  // Choose the requested article (fallback to newest)
-  const firstIdx = Math.max(0, sorted.findIndex(n => n.slug === slug))
-  const first = firstIdx === -1 ? sorted[0] : sorted[firstIdx]
-  const rest = sorted.filter((_, i) => i !== (firstIdx === -1 ? 0 : firstIdx))
+  // Put the clicked article first, then the rest
+  const ordered = useMemo(() => {
+    const idx = sorted.findIndex(n => n.slug === slug);
+    if (idx === -1) return sorted;
+    return [sorted[idx], ...sorted.filter((_, i) => i !== idx)];
+  }, [slug, sorted]);
+
+  // If the slug didn't match anything, fall back to full list
+  const showBack = true;
 
   return (
-    <main className="news-post-page">
-      {/* Page header with big, responsive title */}
-      <header className="page-head">
-        <div className="container">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <Link className="btn" to="/news">← Back to News</Link>
-          </div>
-          {first && (
-            <>
-              <h1 className="page-title" style={{ marginTop: 10 }}>{first.title}</h1>
-              <div style={{ opacity: .75, marginBottom: 8 }}>{fmtDate(first.date)}</div>
-            </>
-          )}
-        </div>
-      </header>
+    <div className="section-white">
+      <section className="container" style={{ padding: '64px 0' }}>
+        {showBack && (
+          <Link className="btn" to="/news" style={{ marginBottom: 16, display: 'inline-block' }}>
+            ← Back to News
+          </Link>
+        )}
 
-      {/* Main article body on white for readability */}
-      <section className="section-white">
-        <div className="container" style={{ padding: '24px 0 48px' }}>
-          <Article post={first} showTitle={false} />
-        </div>
+        {ordered.map((p, i) => (
+          <div key={p.slug}>
+            {i > 0 && (
+              <div
+                style={{
+                  height: 1,
+                  background: 'rgba(0,0,0,.08)',
+                  margin: '24px 0'
+                }}
+              />
+            )}
+            <Article post={p} first={i === 0} />
+          </div>
+        ))}
       </section>
-
-      {/* More posts (optional) */}
-      {rest.length > 0 && (
-        <section>
-          <div className="container" style={{ padding: '32px 0' }}>
-            <div style={{ fontWeight: 900, marginBottom: 12, fontSize: 18 }}>More news</div>
-            {rest.map((p, i) => (
-              <div key={p.slug}>
-                {i > 0 && (
-                  <div
-                    style={{
-                      height: 1,
-                      background: 'rgba(255,255,255,.08)',
-                      margin: '24px 0'
-                    }}
-                  />
-                )}
-                <Article post={p} showTitle />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-    </main>
-  )
+    </div>
+  );
 }
