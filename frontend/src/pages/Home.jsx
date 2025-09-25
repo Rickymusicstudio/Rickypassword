@@ -8,34 +8,36 @@ export default function Home() {
   const goToMusic = () => navigate('/music')
 
   return (
-    <>
-      {/* Play sends users to /music */}
+    <main className="home-page">
+      {/* Hero sits under the fixed header; Play -> /music */}
       <Hero onPlay={goToMusic} />
 
+      {/* About */}
       <section id="about" className="section-white">
-        <div className="container" style={{ padding: '64px 0' }}>
+        <div className="container" style={{ paddingBlock: '56px' }}>
           <div className="about-grid">
-            <img src={artist} alt="Artist" className="about-img" />
+            <img
+              src={artist}
+              alt="Ricky Password portrait"
+              className="about-img"
+              loading="lazy"
+              decoding="async"
+            />
             <div>
               <h2 className="h2">Ricky Password</h2>
               <p className="lead">
                 Ricky Password is a Rwandan artist who began his musical journey in 2011. Over the years, he has
                 established himself as a vibrant voice in Rwanda’s contemporary music scene, blending creativity with
-                energetic stage presence. Early in his career, Ricky performed on some of Rwanda’s most prestigious
-                stages, including the Kigali Up Festival and FESPAD (Pan-African Dance Festival). His talent soon earned
-                him recognition beyond Rwanda, taking him to international stages where he showcased his artistry to
-                diverse audiences. In 2014, his dedication and originality were rewarded when he became a lauréat of
-                VISA pour la Création, a prestigious cultural program supported by the French Institute, which
-                spotlights promising artists from Africa and beyond. Ricky’s catalog includes standout singles that
-                resonate with both local and international fans. Among his most popular works is “Pretend” featuring
-                Gabiro, a track that highlights his collaborative spirit and versatility in sound. With a career rooted
-                in passion and growth, Ricky Password continues to shape Rwanda’s music identity, inspiring audiences
-                with performances and songs that transcend borders.
+                energetic stage presence. Early in his career, Ricky performed on prestigious stages such as Kigali Up
+                Festival and FESPAD. In 2014, he became a lauréat of VISA pour la Création (French Institute), earning
+                recognition beyond Rwanda. Notable works include “Pretend” featuring Gabiro, reflecting his collaborative
+                spirit and versatility. With passion and steady growth, Ricky continues to shape Rwanda’s music identity,
+                inspiring audiences with performances and songs that cross borders.
               </p>
             </div>
           </div>
         </div>
       </section>
-    </>
+    </main>
   )
 }

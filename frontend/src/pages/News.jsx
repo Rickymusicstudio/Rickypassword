@@ -19,8 +19,8 @@ export default function News() {
   const [idx, setIdx] = useState(0)
   const max = posts.length
 
-  const next = () => setIdx((i) => (i + 1) % max)
-  const prev = () => setIdx((i) => (i - 1 + max) % max)
+  const next = () => setIdx(i => (i + 1) % max)
+  const prev = () => setIdx(i => (i - 1 + max) % max)
 
   // Optional autoplay (7s)
   useEffect(() => {
@@ -39,89 +39,108 @@ export default function News() {
       : (current?.images?.[0] || '')) || ''
 
   return (
-    <section className="container" style={{ padding: '64px 0' }}>
-      <h1 className="h2" style={{ color: '#fff', marginBottom: 24 }}>News</h1>
+    <main className="news-page">
+      {/* Page header aligned to gutters */}
+      <header className="page-head">
+        <div className="container">
+          <h1 className="page-title">News</h1>
+        </div>
+      </header>
 
       {/* ===== Slider Hero (image left, content right) ===== */}
       {current && (
-        <div className="news-hero-slider">
-          <article className="news-slide">
-            <div
-              className="news-slide-img"
-              style={heroImg ? { backgroundImage: `url(${heroImg})` } : {}}
-              aria-hidden="true"
-            />
-            <div className="news-slide-content">
-              <div className="news-slide-date">{fmtDate(current.date)}</div>
-              <h2 className="news-slide-title">
-                <Link className="link-plain" to={`/news/${current.slug}`}>
-                  {current.title}
-                </Link>
-              </h2>
-              {current.excerpt ? (
-                <p className="news-slide-excerpt">{current.excerpt}</p>
-              ) : null}
-              {/* removed hero "Read" button */}
-            </div>
-          </article>
-
-          {/* arrows */}
-          {max > 1 && (
-            <div className="slider-arrows">
-              <button className="icon-btn" aria-label="Previous" onClick={prev}>‹</button>
-              <button className="icon-btn" aria-label="Next" onClick={next}>›</button>
-            </div>
-          )}
-
-          {/* dots */}
-          {max > 1 && (
-            <div className="slider-dots">
-              {posts.map((_, i) => (
-                <button
-                  key={i}
-                  className={`slider-dot ${i === idx ? 'active' : ''}`}
-                  aria-label={`Go to slide ${i + 1}`}
-                  onClick={() => setIdx(i)}
+        <section>
+          <div className="container">
+            <div className="news-hero-slider">
+              <article className="news-slide">
+                <div
+                  className="news-slide-img"
+                  style={heroImg ? { backgroundImage: `url(${heroImg})` } : {}}
+                  aria-hidden="true"
                 />
-              ))}
+                <div className="news-slide-content">
+                  <div className="news-slide-date">{fmtDate(current.date)}</div>
+                  <h2 className="news-slide-title">
+                    <Link className="link-plain" to={`/news/${current.slug}`}>
+                      {current.title}
+                    </Link>
+                  </h2>
+                  {current.excerpt ? (
+                    <p className="news-slide-excerpt">{current.excerpt}</p>
+                  ) : null}
+                </div>
+              </article>
+
+              {/* arrows */}
+              {max > 1 && (
+                <div className="slider-arrows">
+                  <button className="icon-btn" aria-label="Previous" onClick={prev}>‹</button>
+                  <button className="icon-btn" aria-label="Next" onClick={next}>›</button>
+                </div>
+              )}
+
+              {/* dots */}
+              {max > 1 && (
+                <div className="slider-dots">
+                  {posts.map((_, i) => (
+                    <button
+                      key={i}
+                      className={`slider-dot ${i === idx ? 'active' : ''}`}
+                      aria-label={`Go to slide ${i + 1}`}
+                      onClick={() => setIdx(i)}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        </section>
       )}
 
       {/* ===== The rest (cards) ===== */}
-      <div className="shop-grid" style={{ marginTop: 20 }}>
-        {rest.map((p) => (
-          <div key={p.slug} className="card">
-            <div style={{ fontWeight: 800 }}>
-              <Link className="link-plain" to={`/news/${p.slug}`}>
-                {p.title}
-              </Link>
-            </div>
-            <div style={{ fontSize: 12, opacity: .7, marginTop: 4 }}>{fmtDate(p.date)}</div>
-            {p.excerpt ? <p style={{ marginTop: 8, opacity: .85 }}>{p.excerpt}</p> : null}
-            {/* keep this if you still want a small "Read" on the cards:
-            <Link className="btn" style={{ marginTop: 8 }} to={`/news/${p.slug}`}>Read</Link>
-            */}
+      <section>
+        <div className="container">
+          <div className="shop-grid" style={{ marginTop: 20 }}>
+            {rest.map((p) => (
+              <div key={p.slug} className="card">
+                <div style={{ fontWeight: 800 }}>
+                  <Link className="link-plain" to={`/news/${p.slug}`}>
+                    {p.title}
+                  </Link>
+                </div>
+                <div style={{ fontSize: 12, opacity: .7, marginTop: 4 }}>{fmtDate(p.date)}</div>
+                {p.excerpt ? <p style={{ marginTop: 8, opacity: .85 }}>{p.excerpt}</p> : null}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* ===== Follow / Subscribe band (no underline) ===== */}
-      <div className="cta-band">
-        <div>
-          <div className="cta-title">Never miss an update</div>
-          <div className="cta-sub">Follow Rickypassword for new music, shows and studio updates.</div>
+          {/* Follow / Subscribe band */}
+          <div className="cta-band">
+            <div>
+              <div className="cta-title">Never miss an update</div>
+              <div className="cta-sub">Follow Rickypassword for new music, shows and studio updates.</div>
+            </div>
+            <div className="cta-actions">
+              <a
+                className="btn btn-solid"
+                href="https://youtube.com/@rickypasswordrwa?si=hJBfh9Ed7_JnlZhx"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Subscribe on YouTube
+              </a>
+              <a
+                className="btn"
+                href="https://www.instagram.com/rickypassword/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Follow on Instagram
+              </a>
+            </div>
+          </div>
         </div>
-        <div className="cta-actions">
-          <a className="btn btn-solid" href="https://youtube.com/@rickypasswordrwa?si=hJBfh9Ed7_JnlZhx" target="_blank" rel="noreferrer">
-            Subscribe on YouTube
-          </a>
-          <a className="btn" href="https://www.instagram.com/rickypassword/" target="_blank" rel="noreferrer">
-            Follow on Instagram
-          </a>
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
   )
 }

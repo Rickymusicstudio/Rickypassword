@@ -36,72 +36,92 @@ export default function Shows() {
   const hasShows = shows.length > 0;
 
   return (
-    <section className="container" style={{ padding: '64px 0' }}>
-      <h1 className="h2" style={{ color: '#fff', marginBottom: 24 }}>Shows</h1>
-
-      {/* Empty state */}
-      {!hasShows && (
-        <div
-          className="card"
-          style={{
-            padding: 20,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 16,
-            flexWrap: 'wrap',
-            borderRadius: 14,
-          }}
-        >
-          <div style={{ maxWidth: 700 }}>
-            <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 6 }}>
-              No upcoming shows announced
-            </div>
-            <div style={{ opacity: 0.85, lineHeight: 1.6 }}>
-              We’re planning the next dates. Follow for updates and be the first to know when new shows drop.
-              For bookings and press, please{' '}
-              <a href="/contact" style={{ color: '#fff' }}>contact us</a>.
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <a className="btn" href={SOCIALS.instagram} target="_blank" rel="noreferrer">
-              Follow on Instagram
-            </a>
-            <a className="btn" href={SOCIALS.youtube} target="_blank" rel="noreferrer">
-              Subscribe on YouTube
-            </a>
-            <a className="btn" href="/contact">Book Ricky Password</a>
-          </div>
+    <main className="shows-page">
+      {/* Page header aligned to gutters */}
+      <header className="page-head">
+        <div className="container">
+          <h1 className="page-title">Shows</h1>
         </div>
-      )}
+      </header>
 
-      {/* Upcoming list */}
-      {hasShows && (
-        <div className="card" style={{ padding: 0, borderRadius: 14 }}>
-          {shows.map((s, i) => (
+      {/* Page content */}
+      <section>
+        <div className="container">
+          {/* Scoped CSS for responsive row layout */}
+          <style>{`
+            .show-list { padding: 0; }
+            .show-row {
+              display: grid;
+              grid-template-columns: 1fr;             /* mobile: stack */
+              gap: 12px;
+              padding: 16px 18px;
+              align-items: center;
+            }
+            .show-row + .show-row {
+              border-top: 1px solid rgba(255,255,255,.08);
+            }
+            @media (min-width: 700px) {
+              .show-row {
+                grid-template-columns: 180px 1fr 1fr auto; /* desktop: date | venue | city | btn */
+              }
+            }
+          `}</style>
+
+          {/* Empty state */}
+          {!hasShows && (
             <div
-              key={`${s.date}-${s.venue}-${i}`}
+              className="card"
               style={{
-                display: 'grid',
-                gridTemplateColumns: '180px 1fr 1fr auto',
-                gap: 12,
-                padding: '16px 18px',
-                borderBottom: i !== shows.length - 1 ? '1px solid rgba(255,255,255,.08)' : 'none',
+                padding: 20,
+                display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 16,
+                flexWrap: 'wrap',
+                borderRadius: 14,
               }}
             >
-              <div style={{ opacity: 0.85 }}>{fmtDate(s.date)}</div>
-              <div style={{ fontWeight: 700 }}>{s.venue}</div>
-              <div style={{ opacity: 0.85 }}>{s.city}</div>
-              {s.link ? (
-                <a className="btn" href={s.link} target="_blank" rel="noreferrer">Tickets</a>
-              ) : (
-                <span style={{ opacity: 0.7, fontSize: 14 }}>Details soon</span>
-              )}
+              <div style={{ maxWidth: 700 }}>
+                <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 6 }}>
+                  No upcoming shows announced
+                </div>
+                <div style={{ opacity: 0.85, lineHeight: 1.6 }}>
+                  We’re planning the next dates. Follow for updates and be the first to know when new shows drop.
+                  For bookings and press, please{' '}
+                  <a href="/contact" style={{ color: '#fff' }}>contact us</a>.
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <a className="btn" href={SOCIALS.instagram} target="_blank" rel="noreferrer">
+                  Follow on Instagram
+                </a>
+                <a className="btn" href={SOCIALS.youtube} target="_blank" rel="noreferrer">
+                  Subscribe on YouTube
+                </a>
+                <a className="btn" href="/contact">Book Ricky Password</a>
+              </div>
             </div>
-          ))}
+          )}
+
+          {/* Upcoming list */}
+          {hasShows && (
+            <div className="card show-list" style={{ padding: 0, borderRadius: 14 }}>
+              {shows.map((s, i) => (
+                <div key={`${s.date}-${s.venue}-${i}`} className="show-row">
+                  <div style={{ opacity: 0.85 }}>{fmtDate(s.date)}</div>
+                  <div style={{ fontWeight: 700 }}>{s.venue}</div>
+                  <div style={{ opacity: 0.85 }}>{s.city}</div>
+                  {s.link ? (
+                    <a className="btn" href={s.link} target="_blank" rel="noreferrer">Tickets</a>
+                  ) : (
+                    <span style={{ opacity: 0.7, fontSize: 14 }}>Details soon</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </section>
+      </section>
+    </main>
   );
 }

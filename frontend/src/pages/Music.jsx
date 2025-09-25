@@ -177,34 +177,51 @@ export default function Music() {
   }
 
   return (
-    <section className="container music-page" style={{ padding: '64px 0' }}>
-      <h1 className="h2" style={{ color: '#fff', marginBottom: 24 }}>Music</h1>
+    <main className="music-page">
+      {/* Page header aligned to site gutters */}
+      <header className="page-head">
+        <div className="container">
+          <h1 className="page-title">Music</h1>
+        </div>
+      </header>
 
-      <div className="music-grid">
-        {tracks.map((t, i) => (
-          <figure className="release-card" key={t.sku || i}>
-            <div className="release-media">
-              <img
-                src={safeUrl(t.cover_url || '/cover.jpg')}
-                alt={`${t.title} cover art`}
-                loading="lazy"
-              />
-              <div className="release-overlay" />
-              <div className="release-actions">
-                <button className="btn btn-solid" onClick={() => requireUnlock({ type: 'listen', track: t })}>
-                  Listen
-                </button>
-                <button className="btn" onClick={() => requireUnlock({ type: 'download', track: t })}>
-                  Download
-                </button>
-              </div>
-            </div>
-            <figcaption className="release-caption">
-              {t.title} {fmtDate(t.released_at) ? `• ${fmtDate(t.released_at)}` : ''}
-            </figcaption>
-          </figure>
-        ))}
-      </div>
+      {/* Content */}
+      <section>
+        <div className="container">
+          <div className="music-grid">
+            {tracks.map((t, i) => (
+              <figure className="release-card" key={t.sku || i}>
+                <div className="release-media" style={{ position: 'relative' }}>
+                  <img
+                    src={safeUrl(t.cover_url || '/cover.jpg')}
+                    alt={`${t.title} cover art`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="release-overlay" />
+                  <div className="release-actions" style={{ position: 'absolute', display: 'flex' }}>
+                    <button
+                      className="btn btn-solid"
+                      onClick={() => requireUnlock({ type: 'listen', track: t })}
+                    >
+                      Listen
+                    </button>
+                    <button
+                      className="btn"
+                      onClick={() => requireUnlock({ type: 'download', track: t })}
+                    >
+                      Download
+                    </button>
+                  </div>
+                </div>
+                <figcaption className="release-caption">
+                  {t.title} {fmtDate(t.released_at) ? `• ${fmtDate(t.released_at)}` : ''}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Modals */}
       <PlayerModal
@@ -218,6 +235,6 @@ export default function Music() {
         onClose={() => setGateOpen(false)}
         onUnlocked={handleUnlocked}
       />
-    </section>
+    </main>
   )
 }

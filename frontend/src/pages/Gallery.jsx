@@ -19,10 +19,7 @@ export default function Gallery() {
   const [open, setOpen] = useState(false)
   const [idx, setIdx] = useState(0)
 
-  const openAt = (i) => {
-    setIdx(i)
-    setOpen(true)
-  }
+  const openAt = (i) => { setIdx(i); setOpen(true) }
   const close = () => setOpen(false)
   const prev = () => setIdx((i) => (i - 1 + items.length) % items.length)
   const next = () => setIdx((i) => (i + 1) % items.length)
@@ -40,31 +37,42 @@ export default function Gallery() {
   }, [open, items.length])
 
   return (
-    <section className="container gallery-page" style={{ padding: '64px 0' }}>
-      <h1 className="h2" style={{ color: '#fff', marginBottom: 24 }}>Gallery</h1>
+    <main className="gallery-page">
+      {/* Page header aligned to gutters */}
+      <header className="page-head">
+        <div className="container">
+          <h1 className="page-title">Gallery</h1>
+        </div>
+      </header>
 
-      {items.length === 0 ? (
-        <div className="card" style={{ opacity: .85 }}>
-          No photos yet. Add files to <code>/public/gallery</code> and entries to <code>src/data/gallery.js</code>.
+      {/* Content */}
+      <section>
+        <div className="container">
+          {items.length === 0 ? (
+            <div className="card" style={{ opacity: .85 }}>
+              No photos yet. Add files to <code>/public/gallery</code> and entries to{' '}
+              <code>src/data/gallery.js</code>.
+            </div>
+          ) : (
+            <div className="gallery-grid">
+              {items.map((it, i) => {
+                const src = resolveSrc(it)
+                if (!src) return null
+                return (
+                  <button
+                    key={it.id || it.file || i}
+                    className="gallery-card"
+                    onClick={() => openAt(i)}
+                    aria-label="Open image"
+                  >
+                    <img src={src} alt="" loading="lazy" decoding="async" />
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="gallery-grid">
-          {items.map((it, i) => {
-            const src = resolveSrc(it)
-            if (!src) return null
-            return (
-              <button
-                key={it.id || it.file || i}
-                className="gallery-card"
-                onClick={() => openAt(i)}
-                aria-label="Open image"
-              >
-                <img src={src} alt="" loading="lazy" />
-              </button>
-            )
-          })}
-        </div>
-      )}
+      </section>
 
       {/* Lightbox */}
       {open && (
@@ -92,6 +100,6 @@ export default function Gallery() {
           )}
         </div>
       )}
-    </section>
+    </main>
   )
 }
