@@ -5,14 +5,24 @@ import { songs as rawSongs } from '../data/songs'
 // ======= CONFIG: your real links
 const SOCIAL_LINKS = {
   youtube: 'https://youtube.com/@rickypasswordrwa?si=hJBfh9Ed7_JnlZhx',
-  instagram: 'https://www.instagram.com/rickypassword/'
+  instagram: 'https://www.instagram.com/rickypassword/',
+}
+
+// ======= Safe localStorage helpers
+const ls = {
+  get(k) {
+    try { return window.localStorage.getItem(k) } catch { return null }
+  },
+  set(k, v) {
+    try { window.localStorage.setItem(k, v) } catch {}
+  },
 }
 
 // ======= Helpers
 const safeUrl = (u = '') => {
   if (!u) return ''
   const url = u.startsWith('/') ? u : `/${u}`
-  return encodeURI(url) // encodes spaces etc., keeps slashes
+  return encodeURI(url)
 }
 const toFileName = (t = 'track') => `${t.replace(/[^\w\-]+/g, '_')}.mp3`
 
@@ -23,13 +33,13 @@ function GateModal({ open, onClose, onUnlocked }) {
 
   useEffect(() => {
     if (open) {
-      setYt(localStorage.getItem('rp_sub_yt') === '1')
-      setIg(localStorage.getItem('rp_sub_ig') === '1')
+      setYt(ls.get('rp_sub_yt') === '1')
+      setIg(ls.get('rp_sub_ig') === '1')
     }
   }, [open])
 
-  const toggleYt = v => { setYt(v); localStorage.setItem('rp_sub_yt', v ? '1' : '0') }
-  const toggleIg = v => { setIg(v); localStorage.setItem('rp_sub_ig', v ? '1' : '0') }
+  const toggleYt = (v) => { setYt(v); ls.set('rp_sub_yt', v ? '1' : '0') }
+  const toggleIg = (v) => { setIg(v); ls.set('rp_sub_ig', v ? '1' : '0') }
 
   const canContinue = yt && ig
   if (!open) return null
@@ -68,7 +78,7 @@ function GateModal({ open, onClose, onUnlocked }) {
             disabled={!canContinue}
             onClick={() => {
               if (!canContinue) return
-              localStorage.setItem('rp_unlock_v1', '1')
+              ls.set('rp_unlock_v1', '1') // remember unlock
               onUnlocked()
             }}
             style={{ opacity: canContinue ? 1 : .5 }}
@@ -109,10 +119,17 @@ function PlayerModal({ open, onClose, title, src }) {
 export default function Music() {
   const [player, setPlayer] = useState({ open: false, title: '', src: '' })
   const [gateOpen, setGateOpen] = useState(false)
-  const [unlocked, setUnlocked] = useState(() => localStorage.getItem('rp_unlock_v1') === '1')
+  const [unlocked, setUnlocked] = useState(false)
   const [pending, setPending] = useState(null) // { type: 'listen'|'download', track }
 
-  // newest first, skip hidden if present
+  // On mount, auto-unlock if previously done or both platform flags already set
+  useEffect(() => {
+    const hadUnlock = ls.get('rp_unlock_v1') === '1'
+    const alreadySubbed = ls.get('rp_sub_yt') === '1' && ls.get('rp_sub_ig') === '1'
+    if (hadUnlock || alreadySubbed) setUnlocked(true)
+  }, [])
+
+  // newest first, skip hidden
   const tracks = useMemo(() => {
     return [...rawSongs]
       .filter(s => !!s && !s.hidden)
@@ -134,8 +151,12 @@ export default function Music() {
     document.body.appendChild(a); a.click(); a.remove()
   }
 
+  const isUnlocked = () =>
+    ls.get('rp_unlock_v1') === '1' || (ls.get('rp_sub_yt') === '1' && ls.get('rp_sub_ig') === '1')
+
   const requireUnlock = (intent) => {
-    if (unlocked) {
+    if (isUnlocked()) {
+      setUnlocked(true)
       if (intent?.type === 'listen') doListen(intent.track)
       else if (intent?.type === 'download') doDownload(intent.track)
       return
