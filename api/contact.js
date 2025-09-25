@@ -1,57 +1,36 @@
 // api/contact.js
-import { Router } from 'express';
-import rateLimit from 'express-rate-limit';
-import { body, validationResult } from 'express-validator';
-import { Resend } from 'resend';
+import { Router } from 'express'
+import { Resend } from 'resend'
 
-const router = Router();
+const router = Router()
+const resend = new Resend(process.env.RESEND_API_KEY)
 
-// rate limit (5 per minute)
-const limiter = rateLimit({ windowMs: 60 * 1000, max: 5 });
-
-// validators
-const validators = [
-  body('name').trim().isLength({ min: 2 }).withMessage('Name required'),
-  body('email').isEmail().withMessage('Valid email required'),
-  body('message').trim().isLength({ min: 3 }).withMessage('Message required'),
-];
-
-// POST /api/contact
-router.post('/contact', limiter, validators, async (req, res) => {
-  // honeypot support (optional)
-  if (req.body.website) return res.status(200).json({ ok: true });
-
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ error: errors.array()[0].msg });
-
-  const { name, email, message } = req.body;
-
-  // instantiate here so it only runs if the route is hit
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const TO = process.env.CONTACT_TO;
-  const FROM = process.env.CONTACT_FROM || 'onboarding@resend.dev';
-
+router.post('/', async (req, res) => {
   try {
-    // send two emails (to you + confirmation to sender)
-    await resend.emails.send({
-      from: FROM,
-      to: TO,
-      subject: `New contact form: ${name}`,
-      text: `From: ${name} <${email}>\n\n${message}`,
-    });
+    const { name = 'Anonymous', email = '', message = '' } = req.body || {}
 
-    await resend.emails.send({
-      from: FROM,
-      to: email,
-      subject: 'Thanks for contacting Ricky Password',
-      text: `Hi ${name},\n\nThanks for your message — I’ll get back to you soon.\n\n— Ricky`,
-    });
+    const toList = (process.env.CONTACT_TO || '')
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean)
 
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('Resend error:', err?.message || err);
-    res.status(500).json({ error: 'Email service error' });
+    if (!toList.length) return res.status(500).json({ error: 'CONTACT_TO missing' })
+    if (!process.env.CONTACT_FROM) return res.status(500).json({ error: 'CONTACT_FROM missing' })
+
+    const { data, error } = await resend.emails.send({
+      from: `${process.env.CONTACT_FROM_NAME || 'Website'} <${process.env.CONTACT_FROM}>`,
+      to: toList,
+      subject: process.env.CONTACT_SUBJECT || `New message from ${name}`,
+      text: `From: ${name}${email ? ` <${email}>` : ''}\n\n${message}`,
+      ...(email ? { reply_to: email } : {}),
+    })
+
+    if (error) return res.status(502).json({ error: error.message || 'Email send failed' })
+    return res.status(200).json({ ok: true, id: data?.id })
+  } catch (e) {
+    console.error('Contact route exception:', e)
+    return res.status(500).json({ error: 'Server error' })
   }
-});
+})
 
-export default router;
+export default router
