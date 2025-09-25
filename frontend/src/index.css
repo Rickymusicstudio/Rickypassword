@@ -542,3 +542,56 @@ html, body { overflow-x: hidden; }
 
 /* override previous value */
 .gallery-page .gallery-grid { padding-inline: 0; }
+
+/* NewsPost — mobile edge + size fixes (no JSX changes) */
+@media (max-width: 640px) {
+  /* keep comfy side gutters and block any tiny overspill */
+  .section-white .container { 
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+    overflow-x: hidden;
+  }
+
+  /* first article title uses <h1 class="h2"> — make it scale down on phones */
+  .section-white .h2 {
+    font-size: clamp(24px, 6.5vw, 32px);
+    line-height: 1.1;
+  }
+
+  /* paragraphs stay readable and never cause sideways scroll */
+  .section-white .container p,
+  .section-white .container h1,
+  .section-white .container h2 {
+    overflow-wrap: anywhere;         /* break long words if needed */
+    word-break: break-word;
+  }
+
+  /* article cover image keeps rounded corners and never overflows */
+  .section-white .container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+}
+
+/* the little gallery grid at the bottom scales to narrow screens */
+.section-white .container .article-gallery {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+/* NewsPost (and other white sections) — extra side padding on phones */
+@media (max-width: 700px) {
+  .section-white > .container {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    overflow-x: hidden; /* belt & suspenders against tiny overflows */
+  }
+
+  /* scale the big H1 a touch on small screens so it doesn't feel cramped */
+  .section-white .h2 {
+    font-size: clamp(26px, 6.5vw, 32px);
+    line-height: 1.1;
+  }
+}
