@@ -399,3 +399,39 @@ main { padding-top: 64px; }
   .header .nav { display: none; }
   */
 }
+
+/* === Mobile hamburger & drawer (works with your current header) === */
+.hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06);
+}
+@media (min-width: 860px) { .hamburger { display: none; } }
+
+.nav-drawer { position: fixed; inset: 0; display: none; z-index: 80; }
+.nav-drawer.open { display: block; }
+.nav-drawer-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.5); }
+.nav-drawer-panel {
+  position: absolute; right: 0; top: 0; bottom: 0;
+  width: min(86%, 360px);
+  background: #0f0f0f;
+  padding: 18px;
+  display: grid; gap: 12px;
+  border-left: 1px solid rgba(255,255,255,.08);
+}
+
+/* === Small-screen hero/player tweaks === */
+@media (max-width: 600px) {
+  .hero { min-height: 58vh; }
+  .player {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 10px;
+    max-width: 100%;
+  }
+  .player img { width: 56px; height: 56px; }
+}
