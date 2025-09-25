@@ -84,7 +84,9 @@ function ShareBar({ url, title }) {
 function Article({ post, first = false }) {
   const paragraphs = post.content ? post.content.split(/\n{2,}/g) : []
   const hasGallery = Array.isArray(post.images) && post.images.length > 0
-  const shareUrl = `${SITE_ORIGIN}/news/${post.slug}`
+
+  // Share via OG-enabled URL that renders meta tags server-side
+  const shareUrl = `${SITE_ORIGIN}/share/news/${post.slug}`
 
   return (
     <article style={{ marginBottom: 36 }}>
@@ -93,10 +95,10 @@ function Article({ post, first = false }) {
       ) : (
         <h2 style={{ margin: '0 0 6px', fontWeight: 800, fontSize: 22 }}>{post.title}</h2>
       )}
-      {/* add more breathing room under title/date */}
+      {/* extra breathing room under title/date */}
       <div style={{ opacity: .7, marginBottom: 14 }}>{fmtDate(post.date)}</div>
 
-      {/* cover image still comes before text (kept) */}
+      {/* cover image (kept before text) */}
       {post.cover_url ? (
         <img
           src={post.cover_url}
