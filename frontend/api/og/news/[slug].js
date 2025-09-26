@@ -7,8 +7,8 @@ const SITE_ORIGIN = process.env.VERCEL_URL
   : 'https://rickypassword.com';
 
 async function loadNews() {
-  // read the slim JSON we generate at build time
-  const res = await fetch(`${SITE_ORIGIN}/news.json`);
+  const origin = "https://rickypassword.com"; // hardcode your site
+  const res = await fetch(`${origin}/news.json`);
   if (!res.ok) return [];
   return await res.json();
 }
