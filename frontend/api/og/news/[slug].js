@@ -1,89 +1,103 @@
 // api/og/news/[slug].js
-// Returns a minimal HTML page with Open Graph tags for a given news slug
-// and meta-refreshes humans to the real SPA route.
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
-const SITE_ORIGIN = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'https://rickypassword.com';
-
-async function loadNews() {
-  const origin = "https://rickypassword.com"; // hardcode your site
-  const res = await fetch(`${origin}/news.json`);
-  if (!res.ok) return [];
-  return await res.json();
+function loadNews() {
+  const file = resolve(process.cwd(), "public", "news.json");
+  const data = JSON.parse(readFileSync(file, "utf8"));
+  return Array.isArray(data.items) ? data.items : [];
 }
 
-function pickImage(post) {
-  if (post?.cover_url) return post.cover_url;
-  if (Array.isArray(post?.images) && post.images.length) return post.images[0];
-  return `${SITE_ORIGIN}/favicon-512.png`;
-}
-
-function summarize(htmlish, n = 160) {
-  if (!htmlish) return '';
-  const text = String(htmlish).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  return text.length > n ? `${text.slice(0, n - 1)}…` : text;
-}
-
-function escapeHtml(s) {
-  return String(s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-export default async function handler(req, res) {
+export default function handler(req, res) {
   try {
-    const slug = req.query.slug;
-    const all = await loadNews();
-    const post = all.find(n => n.slug === slug);
-    if (!post) {
-      res.status(404).send('<!doctype html><title>Not found</title>Not found');
+    const { slug } = req.query || {};
+    if (!slug) {
+      res.status(400).json({ ok: false, error: "Missing slug" });
       return;
     }
 
-    const canonical = `${SITE_ORIGIN}/news/${post.slug}`;
-    const title = post.title || 'News';
-    const desc = summarize(post.content || '');
-    const image = pickImage(post); // MUST be a public HTTPS URL
+    const items = loadNews();
+    const item = items.find(x => x.slug === slug);
 
+    if (!item) {
+      res.status(404).json({ ok: false, error: "Not found" });
+      return;
+    }
+
+    const title = item.title || "Ricky Password";
+    const description = item.description || "News";
+    const image = item.image || "";
+    // Where you want humans to land (your UI route for this post)
+    const prettyUrl =
+      item.url ||
+      `https://rickypassword.com/share/news/${encodeURIComponent(slug)}`;
+
+    // Good caching for bots/CDNs (adjust as you like)
+    res.setHeader("Cache-Control", "public, max-age=300, s-maxage=600");
+
+    // If caller prefers JSON (e.g., API test), serve JSON
+    const accept = (req.headers["accept"] || "").toLowerCase();
+    if (accept.includes("application/json")) {
+      res.status(200).json({ ok: true, item });
+      return;
+    }
+
+    // Full OG/Twitter HTML
     const html = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>${escapeHtml(title)}</title>
+<title>${escHtml(title)}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="canonical" href="${canonical}">
+<meta name="description" content="${escHtml(description)}">
 
+<!-- Open Graph -->
 <meta property="og:type" content="article">
-<meta property="og:title" content="${escapeHtml(title)}">
-<meta property="og:description" content="${escapeHtml(desc)}">
-<meta property="og:url" content="${canonical}">
-<meta property="og:image" content="${image}">
-<meta property="og:image:alt" content="${escapeHtml(title)}">
+<meta property="og:title" content="${escHtml(title)}">
+<meta property="og:description" content="${escHtml(description)}">
+${image ? `<meta property="og:image" content="${escAttr(image)}">` : ""}
+<meta property="og:url" content="${escAttr(prettyUrl)}">
 
+<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="${escapeHtml(title)}">
-<meta name="twitter:description" content="${escapeHtml(desc)}">
-<meta name="twitter:image" content="${image}">
+<meta name="twitter:title" content="${escHtml(title)}">
+<meta name="twitter:description" content="${escHtml(description)}">
+${image ? `<meta name="twitter:image" content="${escAttr(image)}">` : ""}
 
-<meta http-equiv="refresh" content="0; url=${canonical}">
+<link rel="canonical" href="${escAttr(prettyUrl)}">
+<meta http-equiv="refresh" content="0; url=${escAttr(prettyUrl)}" />
+<style>
+  :root { color-scheme: light dark; }
+  body{font-family: ui-sans-serif, system-ui; margin:0; padding:24px;}
+  .card{max-width:720px; margin:0 auto;}
+  img{max-width:100%; border-radius:12px;}
+  a{color:inherit}
+</style>
 </head>
-<body></body>
+<body>
+  <div class="card">
+    <h1>${escHtml(title)}</h1>
+    <p>${escHtml(description)}</p>
+    <p><a href="${escAttr(prettyUrl)}">Open this post</a></p>
+    ${image ? `<img src="${escAttr(image)}" alt="${escAttr(title)}">` : ""}
+  </div>
+  <script>location.replace(${JSON.stringify(prettyUrl)});</script>
+</body>
 </html>`;
 
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.status(200).send(html);
   } catch (e) {
-    console.error(e);
-    res.status(500).send('<!doctype html><title>Error</title>Server error');
+    res.status(500).json({ ok: false, error: e?.message || "Server error" });
   }
 }
 
-export default function handler(req, res) {
-  const { slug } = req.query || {};
-  if (!slug) {
-    return res.status(400).json({ ok: false, error: 'Missing slug' });
-  }
-  // Temporary redirect keeps URL visible, easy to roll back
-  res.redirect(307, `/share/news/${encodeURIComponent(slug)}`);
+function escHtml(s = "") {
+  return String(s)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+function escAttr(s = "") {
+  return String(s).replaceAll('"', "&quot;");
 }
