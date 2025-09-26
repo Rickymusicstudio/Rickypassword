@@ -86,7 +86,7 @@ function Article({ post, first = false }) {
   const hasGallery = Array.isArray(post.images) && post.images.length > 0
 
   // Share via OG-enabled URL that renders meta tags server-side
-  const shareUrl = `${SITE_ORIGIN}/news/${post.slug}`;
+  const shareUrl = `${SITE_ORIGIN}/api/og/news/${post.slug}`;
 
   return (
     <article style={{ marginBottom: 36 }}>
