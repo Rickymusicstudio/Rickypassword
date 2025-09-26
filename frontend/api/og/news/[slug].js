@@ -78,3 +78,12 @@ export default async function handler(req, res) {
     res.status(500).send('<!doctype html><title>Error</title>Server error');
   }
 }
+
+export default function handler(req, res) {
+  const { slug } = req.query || {};
+  if (!slug) {
+    return res.status(400).json({ ok: false, error: 'Missing slug' });
+  }
+  // Temporary redirect keeps URL visible, easy to roll back
+  res.redirect(307, `/share/news/${encodeURIComponent(slug)}`);
+}
