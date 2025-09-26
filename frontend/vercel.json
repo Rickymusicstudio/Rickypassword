@@ -1,19 +1,14 @@
 {
   "rewrites": [
-    { "source": "/api/share/news/:slug", "destination": "/api/share/news/:slug" },
-    { "source": "/share/news/:slug", "destination": "/api/share/news/:slug" },
-
     {
       "source": "/news/:slug",
       "has": [
-        {
-          "type": "header",
-          "key": "user-agent",
-          "value": "(?i).*(WhatsApp|facebookexternalhit|TwitterBot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Pinterest|redditbot).*"
-        }
+        { "type": "header", "key": "user-agent", "value": "(?i).*(WhatsApp|facebookexternalhit|TwitterBot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Pinterest|redditbot).*" }
       ],
       "destination": "/api/share/news/:slug"
     },
+
+    { "source": "/share/news/:slug", "destination": "/api/share/news/:slug" },
 
     { "source": "/api/:path*", "destination": "https://rickypassword.onrender.com/api/:path*" },
     { "source": "/((?!api/).*)", "destination": "/" }
