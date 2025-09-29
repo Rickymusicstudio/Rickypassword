@@ -1,19 +1,20 @@
 {
-  "rewrites": [
-    { "source": "/n/:slug", "destination": "/api/s/:slug" },
+  "routes": [
+    { "src": "^/n/([^/]+)$", "dest": "/api/s/$1" },
+
     {
-      "source": "/news/:slug",
+      "src": "^/news/([^/]+)$",
       "has": [
-        {
-          "type": "header",
-          "key": "user-agent",
-          "value": "(?i).*(WhatsApp|facebookexternalhit|TwitterBot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Pinterest|redditbot).*"
-        }
+        { "type": "header", "key": "user-agent", "value": "(?i).*(WhatsApp|facebookexternalhit|TwitterBot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Pinterest|redditbot).*" }
       ],
-      "destination": "/api/s/:slug"
+      "dest": "/api/s/$1"
     },
-    { "source": "/api/s/:slug", "destination": "/api/s/:slug" },
-    { "source": "/api/:path*", "destination": "https://rickypassword.onrender.com/api/:path*" },
-    { "source": "/((?!api/).*)", "destination": "/" }
+
+    { "src": "^/api/local-ok$", "dest": "/api/local-ok" },
+    { "src": "^/api/s/([^/]+)$", "dest": "/api/s/$1" },
+
+    { "src": "^/api/(.*)$", "dest": "https://rickypassword.onrender.com/api/$1" },
+
+    { "src": "^(?!/api/).*", "dest": "/" }
   ]
 }
