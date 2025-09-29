@@ -5,7 +5,9 @@
       "title": "Ricky Password in cinema",
       "excerpt": "Ricky Password ventures into cinema again.",
       "cover_url": "https://rickypassword.com/news/new1.jpg",
-      "images": ["/news/new1.jpg"],
+      "images": [
+        "/news/new1.jpg"
+      ],
       "date": "2025-09-01"
     },
     {
@@ -13,9 +15,10 @@
       "title": "New Music Coming out soon",
       "excerpt": "New music coming soon.",
       "cover_url": "https://rickypassword.com/news/new2.jpg",
-      "images": ["/news/new2.jpg"],
+      "images": [
+        "/news/new2.jpg"
+      ],
       "date": "2025-08-15"
     }
   ]
 }
- 

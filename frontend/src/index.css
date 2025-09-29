@@ -169,8 +169,34 @@ body.no-scroll { overflow: hidden; }
 .hero {
   position: relative; min-height: 80vh; display: flex; align-items: flex-end;
   background-size: cover; background-position: center;
+  overflow: hidden; /* Clip any overspill from the hero so it can't widen the page */
 }
-.hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+
+/* TOP BAND FIX:
+   make the very top transparent so it doesn't create a dark strip under the header */
+.hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0,         /* fully transparent at the very top */
+    rgba(0,0,0,0) 96px,      /* keep area below header clear */
+    rgba(0,0,0,.25) 220px,   /* start darkening */
+    rgba(0,0,0,.60) 100%     /* stronger at the bottom for text contrast */
+  );
+}
+@media (max-width: 600px) {
+  .hero::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0) 0,
+      rgba(0,0,0,0) 72px,     /* slightly shorter clear zone on small phones */
+      rgba(0,0,0,.22) 160px,
+      rgba(0,0,0,.55) 100%
+    );
+  }
+}
+
 .hero-blob {
   position: absolute; right: -80px; top: -120px; width: 520px; height: 520px;
   background: rgba(255, 77, 172, .22); filter: blur(48px); border-radius: 50%;
@@ -495,9 +521,6 @@ body.no-scroll { overflow: hidden; }
   }
 }
 
-/* Clip any overspill from the hero so it can't widen the page */
-.hero { overflow: hidden; }
-
 /* Keep the blob inside on smaller screens */
 @media (max-width: 900px) {
   .hero-blob {
@@ -516,7 +539,6 @@ body.no-scroll { overflow: hidden; }
 
 /* Belt-and-suspenders: prevent any accidental horizontal scroll */
 html, body { overflow-x: hidden; }
-
 
 /* ==== Page header pattern (works on all pages) ==== */
 .page-head {
@@ -595,3 +617,17 @@ html, body { overflow-x: hidden; }
     line-height: 1.1;
   }
 }
+
+/* --- Keep ONLY the hero image (remove all overlays) --- */
+.hero-blob { display: none !important; }        /* remove pink/bright blob */
+.hero::before { content: none !important; }     /* remove darkening overlay */
+.hero::after  { content: none !important; }     /* remove top-mask/gradient */
+
+/* Remove the offset when the first thing in main is the hero */
+main:has(.hero:first-child) {
+  padding-top: 0 !important;
+}
+
+/* (Optional) make the join perfectly seamless */
+.header { border-bottom: none !important; }
+.hero   { margin-top: 0 !important; }

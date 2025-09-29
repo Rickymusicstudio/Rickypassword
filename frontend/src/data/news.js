@@ -5,7 +5,7 @@ export const NEWS = [
     title: 'Ricky Password in cinema',
     date: '2025-09-01',
     excerpt: 'Ricky Password ventures into cinema again.',
-    cover_url: '', // optional: e.g. '/covers/madiva-cover.jpg'
+    cover_url: 'https://rickypassword.com/news/new1.jpg', // optional: e.g. '/covers/madiva-cover.jpg'
     content: `
 Rwandan music artist Ricky Password has once again proven his versatility by stepping into the world of cinema. In a yet-to-be-released Rwandan movie "IBYAHISHUWE", Ricky Password takes on one of the leading roles, starring alongside Kate Kayitabarwa, one of the country’s most celebrated actresses. The trailer has already sparked excitement, giving fans a glimpse of his performance on the big screen.
 When asked about his role, Ricky Password shared:
@@ -23,7 +23,7 @@ With his unique blend of music and acting, Ricky Password continues to inspire m
     title: 'New Music Coming out soon',
     date: '2025-08-15',
     excerpt: 'New music coming soon.',
-    cover_url: '',
+    cover_url: 'https://rickypassword.com/news/new2.jpg',
     content: `
 It’s been a while since fans heard new music from Ricky Password, but the wait is nearly over. The Rwandan artist has confirmed that he is working on a fresh release, marking his return after his last single, “Star”, which was shared only in audio format without a music video.
 Speaking about the break, Ricky Password admitted that music remains a deep passion of his, even though other responsibilities have limited his time in the studio.

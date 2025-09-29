@@ -1,5 +1,5 @@
 // src/components/Hero.jsx
-import heroImg from '../assets/hero.jpg';
+import heroImg from '../assets/hero_image2.png';
 import cover from '../assets/star_cover.jpg';
 import { Link } from 'react-router-dom';
 
