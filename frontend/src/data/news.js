@@ -15,11 +15,15 @@ When asked about the release date, Ricky revealed:
 “The date will be communicated soon.”
 Fans are eagerly waiting, and with such a strong collaboration in the works, expectations are high for Ricky Password’s much-anticipated comeback track.
     `.trim(),
-    images: [
+    // share-only gallery (hidden on normal news unless enabled)
+    images_share: [
       'https://rickypassword.com/gallery/studio_session_1.jpg',
       'https://rickypassword.com/gallery/studio_session_2.jpg',
+      'https://rickypassword.com/gallery/studio_session_4.jpg',
+      'https://rickypassword.com/gallery/studio_session_4.jpg',
       'https://rickypassword.com/gallery/studio_session_4.jpg'
-    ]
+    ],
+    show_gallery: false
   },
 
   {
@@ -35,9 +39,10 @@ When asked about his role, Ricky Password shared:
 This isn’t Ricky Password’s first time in front of the camera. Back in 2015, he featured in the film Mutoni, directed by the same filmmaker behind this new project, Roger. He also appeared in other productions such as UBU N’EJO and Inshuti Friends, cementing his presence in Rwanda’s growing film industry.
 With his unique blend of music and acting, Ricky Password continues to inspire many by showing that creativity can cross boundaries. Fans eagerly await the release of this new movie to witness his talent shine alongside Kate Kayitabarwa in what promises to be an exciting production.
     `.trim(),
-    images: [
+    images_share: [
       'https://rickypassword.com/news/new1.jpg'
-    ]
+    ],
+    show_gallery: false
   },
 
   {
@@ -53,8 +58,9 @@ Speaking about the break, Ricky Password admitted that music remains a deep pass
 Ricky revealed that his upcoming project is being produced by a locally renowned new-generation producer, someone whose unique sound and creative touch he has long admired. He emphasized his desire to collaborate with younger talent, bringing a fresh flavor to his artistry.
 While the official release date has not yet been announced, Ricky Password assured fans that details will be communicated in the coming days. With anticipation already building, this new track promises to reintroduce Ricky’s voice and energy to Rwanda’s music scene.
     `.trim(),
-    images: [
+    images_share: [
       'https://rickypassword.com/news/new2.jpg'
-    ]
+    ],
+    show_gallery: false
   }
 ];

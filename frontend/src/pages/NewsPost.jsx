@@ -1,5 +1,6 @@
-import { useMemo } from 'react'
-import { Link, useParams } from 'react-router-dom'
+// src/pages/NewsPost.jsx
+import { useMemo, useState, useEffect } from 'react'
+import { Link, useParams, useLocation } from 'react-router-dom'
 import { NEWS } from '../data/news'
 
 const fmtDate = (d) =>
@@ -40,7 +41,7 @@ function ShareBar({ url, title }) {
     borderRadius: '50%',
     border: '1px solid rgba(0,0,0,.14)',
     background: '#fff',
-    color: '#111', // key fix: ensures fill="currentColor" is visible on Android
+    color: '#111',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -84,7 +85,7 @@ function ShareBar({ url, title }) {
         href={waHref}
         target="_blank"
         rel="noreferrer"
-        style={{ ...iconBtn, color: '#25D366' }} // color drives SVG fill via currentColor
+        style={{ ...iconBtn, color: '#25D366' }}
         title="Share on WhatsApp"
       >
         <svg viewBox="0 0 24 24" style={iconSvg} aria-hidden="true">
@@ -96,10 +97,118 @@ function ShareBar({ url, title }) {
   )
 }
 
-/** Single full article block (share appears after text, before any gallery) */
-function Article({ post, first = false }) {
+/** Lightbox for gallery images (Esc/←/→, click backdrop to close) */
+function Lightbox({ images, index, onClose, setIndex }) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') setIndex((i) => (i - 1 + images.length) % images.length)
+      if (e.key === 'ArrowRight') setIndex((i) => (i + 1) % images.length)
+    }
+    document.addEventListener('keydown', onKey)
+    // prevent background scroll
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [images.length, onClose, setIndex])
+
+  if (!images?.length) return null
+  const src = images[index]
+
+  const overlay = {
+    position: 'fixed',
+    inset: 0,
+    background: 'rgba(0,0,0,.9)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10000,
+    padding: 16,
+  }
+  const imgStyle = {
+    maxWidth: '92vw',
+    maxHeight: '92vh',
+    borderRadius: 12,
+    boxShadow: '0 20px 50px rgba(0,0,0,.5)',
+  }
+  const btn = {
+    position: 'fixed',
+    top: 16,
+    right: 16,
+    background: 'rgba(255,255,255,.1)',
+    border: '1px solid rgba(255,255,255,.2)',
+    color: '#fff',
+    padding: '10px 14px',
+    borderRadius: 10,
+    cursor: 'pointer',
+    fontWeight: 700,
+  }
+  const arrow = (side) => ({
+    position: 'fixed',
+    top: '50%',
+    [side]: 16,
+    transform: 'translateY(-50%)',
+    width: 44,
+    height: 44,
+    borderRadius: '50%',
+    border: '1px solid rgba(255,255,255,.25)',
+    background: 'rgba(255,255,255,.08)',
+    color: '#fff',
+    display: 'grid',
+    placeItems: 'center',
+    cursor: 'pointer',
+    userSelect: 'none',
+    fontSize: 24,
+    fontWeight: 800,
+  })
+
+  return (
+    <div style={overlay} onClick={onClose} role="dialog" aria-modal="true">
+      <img
+        src={src}
+        alt=""
+        style={imgStyle}
+        onClick={(e) => e.stopPropagation()}
+      />
+      <button style={btn} onClick={onClose} aria-label="Close (Esc)">Close ✕</button>
+      {images.length > 1 && (
+        <>
+          <button
+            style={arrow('left')}
+            onClick={(e) => { e.stopPropagation(); setIndex((i) => (i - 1 + images.length) % images.length) }}
+            aria-label="Previous (←)"
+          >‹</button>
+          <button
+            style={arrow('right')}
+            onClick={(e) => { e.stopPropagation(); setIndex((i) => (i + 1) % images.length) }}
+            aria-label="Next (→)"
+          >›</button>
+        </>
+      )}
+    </div>
+  )
+}
+
+/** Single full article block (cover only on shared link; gallery clickable) */
+function Article({ post, first = false, isShare = false }) {
   const paragraphs = post.content ? post.content.split(/\n{2,}/g) : []
-  const hasGallery = Array.isArray(post.images) && post.images.length > 0
+
+  // Prefer images_share; fallback to images
+  const gallery = Array.isArray(post.images_share) && post.images_share.length
+    ? post.images_share
+    : (Array.isArray(post.images) ? post.images : [])
+
+  const hasGallery = gallery.length > 0
+
+  // Lightbox state
+  const [lbOpen, setLbOpen] = useState(false)
+  const [lbIndex, setLbIndex] = useState(0)
+
+  const openLightbox = (i) => { setLbIndex(i); setLbOpen(true) }
+  const closeLightbox = () => setLbOpen(false)
 
   // Share via short OG-enabled URL that renders meta tags server-side
   const shareUrl = `${SITE_ORIGIN}/n/${post.slug}`
@@ -111,11 +220,10 @@ function Article({ post, first = false }) {
       ) : (
         <h2 style={{ margin: '0 0 6px', fontWeight: 800, fontSize: 22 }}>{post.title}</h2>
       )}
-      {/* extra breathing room under title/date */}
       <div style={{ opacity: .7, marginBottom: 14 }}>{fmtDate(post.date)}</div>
 
-      {/* cover image (kept before text) */}
-      {post.cover_url ? (
+      {/* COVER: show ONLY on shared link */}
+      {isShare && post.cover_url ? (
         <img
           src={post.cover_url}
           alt=""
@@ -134,7 +242,7 @@ function Article({ post, first = false }) {
       {/* Share bar RIGHT AFTER TEXT (before gallery) */}
       <ShareBar url={shareUrl} title={post.title} />
 
-      {/* optional gallery below share */}
+      {/* GALLERY with clickable images */}
       {hasGallery && (
         <>
           <h3 style={{ margin: '12px 0 10px', fontWeight: 800, fontSize: 18 }}>Gallery</h3>
@@ -146,23 +254,34 @@ function Article({ post, first = false }) {
               justifyContent: 'start'
             }}
           >
-            {post.images.map((src, idx) => (
+            {gallery.map((src, idx) => (
               <figure key={idx} style={{ margin: 0, width: '100%' }}>
                 <img
                   src={src}
                   alt=""
                   loading="lazy"
+                  onClick={() => openLightbox(idx)}
                   style={{
                     width: '100%',
                     aspectRatio: '1 / 1',
                     objectFit: 'cover',
                     borderRadius: 12,
-                    display: 'block'
+                    display: 'block',
+                    cursor: 'zoom-in'
                   }}
                 />
               </figure>
             ))}
           </div>
+
+          {lbOpen && (
+            <Lightbox
+              images={gallery}
+              index={lbIndex}
+              setIndex={setLbIndex}
+              onClose={closeLightbox}
+            />
+          )}
         </>
       )}
     </article>
@@ -171,6 +290,8 @@ function Article({ post, first = false }) {
 
 export default function NewsPost() {
   const { slug } = useParams()
+  const location = useLocation()
+  const isShare = location.pathname.startsWith('/share/news/')
 
   const sorted = useMemo(() => [...NEWS].sort((a, b) => new Date(b.date) - new Date(a.date)), [])
   const ordered = useMemo(() => {
@@ -189,7 +310,7 @@ export default function NewsPost() {
         {ordered.map((p, i) => (
           <div key={p.slug}>
             {i > 0 && <div style={{ height: 1, background: 'rgba(0,0,0,.08)', margin: '24px 0' }} />}
-            <Article post={p} first={i === 0} />
+            <Article post={p} first={i === 0} isShare={isShare} />
           </div>
         ))}
       </section>
