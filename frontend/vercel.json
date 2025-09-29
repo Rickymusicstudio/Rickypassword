@@ -1,6 +1,11 @@
 {
   "rewrites": [
+    
+    { "source": "/og/news/:slug.html", "destination": "/og/news/:slug.html" },
+
+   
     { "source": "/n/:slug", "destination": "/og/news/:slug.html" },
+
 
     {
       "source": "/news/:slug",
@@ -14,8 +19,11 @@
       "destination": "/og/news/:slug.html"
     },
 
+   
+    { "source": "/news.json", "destination": "/news.json" },
     { "source": "/api/:path*", "destination": "https://rickypassword.onrender.com/api/:path*" },
 
-    { "source": "/((?!api/).*)", "destination": "/" }
+   
+    { "source": "/((?!api/|og/).*)", "destination": "/" }
   ]
 }
