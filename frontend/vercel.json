@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/n/:slug", "destination": "/api/s/:slug" },
+
     {
       "source": "/news/:slug",
       "has": [
@@ -12,10 +13,14 @@
       ],
       "destination": "/api/s/:slug"
     },
+
     { "source": "/api/local-ok", "destination": "/api/local-ok" },
     { "source": "/api/s/:slug", "destination": "/api/s/:slug" },
+
     { "source": "/news.json", "destination": "/news.json" },
+
     { "source": "/api/:path*", "destination": "https://rickypassword.onrender.com/api/:path*" },
+
     { "source": "/((?!api/|news\\.json).*)", "destination": "/" }
   ]
 }

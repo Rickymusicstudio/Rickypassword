@@ -3,7 +3,7 @@ export default async function handler(req, res) {
   try {
     const ITEMS = await loadItems(req);
 
-    // --- DEBUG FIRST ---
+    // DEBUG FIRST so /api/s/any?debug=1 always lists slugs
     if ("debug" in (req.query || {})) {
       return res.status(200).json({
         ok: true,
@@ -23,11 +23,13 @@ export default async function handler(req, res) {
     const image = abs(item.cover_url || (Array.isArray(item.images) && item.images[0]) || "");
     const prettyUrl = `https://rickypassword.com/news/${encodeURIComponent(slug)}`;
 
+    // JSON if explicitly requested
     const accept = String(req.headers["accept"] || "").toLowerCase();
     if (accept.includes("application/json")) {
       return res.status(200).json({ ok: true, item, prettyUrl, image });
     }
 
+    // OG HTML + meta refresh to the reader page
     const html = `<!doctype html><html lang="en"><head>
 <meta charset="utf-8" />
 <title>${esc(title)}</title>
@@ -64,8 +66,8 @@ async function loadItems(req) {
     const r = await fetch(url, { cache: "no-store" });
     if (r.ok) {
       const data = await r.json();
-      if (Array.isArray(data?.items)) return data.items; // your file uses {ok,count,items}
-      if (Array.isArray(data)) return data;
+      if (Array.isArray(data?.items)) return data.items;   // your file has { ok, count, items }
+      if (Array.isArray(data)) return data;                // also accept raw array
     }
   } catch {}
 
@@ -75,7 +77,6 @@ async function loadItems(req) {
     const arr = mod?.NEWS ?? mod?.default;
     if (Array.isArray(arr)) return arr;
   } catch {}
-
   return [];
 }
 
