@@ -1,4 +1,3 @@
-// src/pages/NewsPost.jsx
 import { useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { NEWS } from '../data/news'
@@ -25,22 +24,32 @@ function ShareBar({ url, title }) {
     display: 'flex',
     alignItems: 'center',
     gap: 10,
-    marginTop: 14,   // sits just under the text
+    marginTop: 14,
     marginBottom: 2,
   }
   const label = { color: 'rgba(0,0,0,.6)', fontWeight: 600, fontSize: 14, marginRight: 2 }
+
+  // Android-safe button (explicit color so SVG with currentColor is visible)
   const iconBtn = {
-    width: 34,
-    height: 34,
+    width: 40,
+    height: 40,
+    minWidth: 40,
+    minHeight: 40,
+    lineHeight: 0,
+    padding: 0,
     borderRadius: '50%',
-    border: '1px solid rgba(0,0,0,.12)',
+    border: '1px solid rgba(0,0,0,.14)',
     background: '#fff',
+    color: '#111', // key fix: ensures fill="currentColor" is visible on Android
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
+    WebkitAppearance: 'none',
+    appearance: 'none',
+    WebkitTapHighlightColor: 'transparent',
   }
-  const iconSvg = { width: 18, height: 18, display: 'block' }
+  const iconSvg = { width: 20, height: 20, display: 'block', flex: '0 0 auto' }
 
   const toast = (msg) => {
     const t = document.createElement('div')
@@ -62,7 +71,7 @@ function ShareBar({ url, title }) {
       <span style={label}>Share</span>
 
       {/* Copy link */}
-      <button aria-label="Copy link" onClick={copy} style={iconBtn}>
+      <button aria-label="Copy link" onClick={copy} style={iconBtn} title="Copy link">
         <svg viewBox="0 0 24 24" style={iconSvg} aria-hidden="true">
           <path fill="currentColor"
             d="M10.6 13.4a1 1 0 0 0 1.4 1.4l4.24-4.24a3 3 0 1 0-4.24-4.24L9 8.26a1 1 0 1 0 1.41 1.41l3.06-3.06a1 1 0 1 1 1.41 1.41L10.6 13.4ZM13.4 10.6a1 1 0 0 0-1.4-1.4L7.76 13.4a3 3 0 1 0 4.24 4.24L15 14.74a1 1 0 0 0-1.41-1.41l-3.06 3.06a1 1 0 1 1-1.41-1.41L13.4 10.6Z"/>
@@ -70,8 +79,15 @@ function ShareBar({ url, title }) {
       </button>
 
       {/* WhatsApp */}
-      <a aria-label="Share on WhatsApp" href={waHref} target="_blank" rel="noreferrer" style={iconBtn}>
-        <svg viewBox="0 0 24 24" style={{ ...iconSvg, color: '#25D366' }} aria-hidden="true">
+      <a
+        aria-label="Share on WhatsApp"
+        href={waHref}
+        target="_blank"
+        rel="noreferrer"
+        style={{ ...iconBtn, color: '#25D366' }} // color drives SVG fill via currentColor
+        title="Share on WhatsApp"
+      >
+        <svg viewBox="0 0 24 24" style={iconSvg} aria-hidden="true">
           <path fill="currentColor"
             d="M20.52 3.48A11.9 11.9 0 0 0 12.06 0C5.44 0 .06 5.37.06 12c0 2.11.55 4.15 1.61 5.96L.01 24l6.2-1.62A11.86 11.86 0 0 0 12.06 24C18.69 24 24.06 18.63 24.06 12c0-3.18-1.24-6.16-3.54-8.52ZM12.06 22a9.9 9.9 0 0 1-5.03-1.38l-.36-.21-3.57.93.95-3.49-.23-.36A9.93 9.93 0 1 1 22.06 12a9.95 9.95 0 0 1-10 10Zm5.3-7.48c-.29-.14-1.71-.84-1.98-.94-.27-.1-.47-.14-.67.14-.2.29-.77.94-.95 1.13-.17.19-.35.22-.64.08-.29-.14-1.23-.45-2.35-1.43-.86-.73-1.44-1.64-1.6-1.92-.17-.29-.02-.45.12-.59.12-.12.29-.32.43-.48.14-.16.19-.27.29-.45.1-.19.05-.35-.02-.48-.07-.14-.67-1.61-.91-2.21-.24-.58-.48-.5-.67-.51h-.57c-.19 0-.48.07-.73.35-.25.29-.96.94-.96 2.28 0 1.35.99 2.65 1.13 2.84.14.19 1.95 2.98 4.74 4.18.66.29 1.18.46 1.59.6.67.21 1.28.18 1.76.11.54-.08 1.71-.7 1.95-1.38.24-.67.24-1.25.17-1.38-.07-.13-.26-.2-.55-.34Z"/>
         </svg>
@@ -86,7 +102,7 @@ function Article({ post, first = false }) {
   const hasGallery = Array.isArray(post.images) && post.images.length > 0
 
   // Share via short OG-enabled URL that renders meta tags server-side
-  const shareUrl = `${SITE_ORIGIN}/n/${post.slug}`;
+  const shareUrl = `${SITE_ORIGIN}/n/${post.slug}`
 
   return (
     <article style={{ marginBottom: 36 }}>
