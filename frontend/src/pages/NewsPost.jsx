@@ -85,8 +85,8 @@ function Article({ post, first = false }) {
   const paragraphs = post.content ? post.content.split(/\n{2,}/g) : []
   const hasGallery = Array.isArray(post.images) && post.images.length > 0
 
-  // Share via OG-enabled URL that renders meta tags server-side
-  const shareUrl = `${SITE_ORIGIN}/api/og/news/${post.slug}`;
+  // Share via short OG-enabled URL that renders meta tags server-side
+  const shareUrl = `${SITE_ORIGIN}/n/${post.slug}`
 
   return (
     <article style={{ marginBottom: 36 }}>

@@ -1,7 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/og/news/:slug", "destination": "/api/og/news/:slug" },
-    { "source": "/share/news/:slug", "destination": "/api/og/news/:slug" },
+    { "source": "/n/:slug", "destination": "/api/s/:slug" },
 
     {
       "source": "/news/:slug",
@@ -12,10 +11,16 @@
           "value": "(?i).*(WhatsApp|facebookexternalhit|TwitterBot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Pinterest|redditbot).*"
         }
       ],
-      "destination": "/api/og/news/:slug"
+      "destination": "/api/s/:slug"
     },
 
+    
+    { "source": "/api/s/:slug", "destination": "/api/s/:slug" },
+
+    
     { "source": "/api/:path*", "destination": "https://rickypassword.onrender.com/api/:path*" },
+
+    
     { "source": "/((?!api/).*)", "destination": "/" }
   ]
 }
