@@ -3,11 +3,13 @@ export default async function handler(req, res) {
   try {
     const ITEMS = await loadItems(req);
 
-    // Debug: /api/s/anything?debug=1
-    if (req.query?.debug === "1") {
-      return res
-        .status(200)
-        .json({ ok: true, count: ITEMS.length, slugs: ITEMS.map(x => x.slug) });
+    // Debug FIRST so /api/s/any?debug=1 works even if slug doesn't exist
+    if ("debug" in (req.query || {})) {
+      return res.status(200).json({
+        ok: true,
+        count: ITEMS.length,
+        slugs: ITEMS.map(x => x.slug)
+      });
     }
 
     const { slug } = req.query || {};
@@ -21,11 +23,13 @@ export default async function handler(req, res) {
     const image = abs(item.cover_url || (Array.isArray(item.images) && item.images[0]) || "");
     const prettyUrl = `https://rickypassword.com/news/${encodeURIComponent(slug)}`;
 
+    // JSON if explicitly requested
     const accept = String(req.headers["accept"] || "").toLowerCase();
     if (accept.includes("application/json")) {
       return res.status(200).json({ ok: true, item, prettyUrl, image });
     }
 
+    // OG HTML + meta refresh
     const html = `<!doctype html><html lang="en"><head>
 <meta charset="utf-8" />
 <title>${esc(title)}</title>
@@ -66,11 +70,14 @@ async function loadItems(req) {
       if (Array.isArray(data)) return data;
     }
   } catch {}
+
+  // optional fallback: import from source if bundled
   try {
     const mod = await import("../../src/data/news.js");
     const arr = mod?.NEWS ?? mod?.default;
     if (Array.isArray(arr)) return arr;
   } catch {}
+
   return [];
 }
 
