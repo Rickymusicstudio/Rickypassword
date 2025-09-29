@@ -13,8 +13,14 @@
     { "src": "^/api/local-ok$", "dest": "/api/local-ok" },
     { "src": "^/api/s/([^/]+)$", "dest": "/api/s/$1" },
 
+   
+    { "handle": "filesystem" },
+    { "src": "^/news\\.json$", "dest": "/news.json" },
+
+   
     { "src": "^/api/(.*)$", "dest": "https://rickypassword.onrender.com/api/$1" },
 
+    
     { "src": "^(?!/api/).*", "dest": "/" }
   ]
 }
