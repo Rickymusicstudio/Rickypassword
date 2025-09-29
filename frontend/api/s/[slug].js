@@ -1,20 +1,25 @@
 // api/s/[slug].js
 export default async function handler(req, res) {
   try {
-    const ITEMS = await loadItems(req);
+    // Robust URL parsing (works regardless of framework extras)
+    const host = req.headers["x-forwarded-host"] || req.headers.host || "rickypassword.com";
+    const proto = (req.headers["x-forwarded-proto"] || "https").split(",")[0];
+    const url = new URL(req.url, `${proto}://${host}`);
 
-    // DEBUG FIRST so /api/s/any?debug=1 always lists slugs
-    if ("debug" in (req.query || {})) {
-      return res.status(200).json({
-        ok: true,
-        count: ITEMS.length,
-        slugs: ITEMS.map(x => x.slug)
-      });
+    // slug from path OR from any framework-provided query
+    const m = url.pathname.match(/\/api\/s\/([^/?#]+)/);
+    const slugFromPath = m ? decodeURIComponent(m[1]) : undefined;
+    const slug = (req.query && req.query.slug) || (req.params && req.params.slug) || slugFromPath;
+
+    // debug BEFORE anything else
+    if (url.searchParams.has("debug")) {
+      const items = await loadItems(url);
+      return res.status(200).json({ ok: true, count: items.length, slugs: items.map(i => i.slug) });
     }
 
-    const { slug } = req.query || {};
     if (!slug) return res.status(400).json({ ok: false, error: "Missing slug" });
 
+    const ITEMS = await loadItems(url);
     const item = ITEMS.find(n => n.slug === slug);
     if (!item) return res.status(404).json({ ok: false, error: "Not found" });
 
@@ -23,13 +28,13 @@ export default async function handler(req, res) {
     const image = abs(item.cover_url || (Array.isArray(item.images) && item.images[0]) || "");
     const prettyUrl = `https://rickypassword.com/news/${encodeURIComponent(slug)}`;
 
-    // JSON if explicitly requested
+    // JSON if requested
     const accept = String(req.headers["accept"] || "").toLowerCase();
     if (accept.includes("application/json")) {
       return res.status(200).json({ ok: true, item, prettyUrl, image });
     }
 
-    // OG HTML + meta refresh to the reader page
+    // OG HTML + redirect
     const html = `<!doctype html><html lang="en"><head>
 <meta charset="utf-8" />
 <title>${esc(title)}</title>
@@ -57,21 +62,15 @@ ${image ? `<meta name="twitter:image" content="${attr(image)}" />` : ""}
   }
 }
 
-async function loadItems(req) {
-  const host = req.headers["x-forwarded-host"] || req.headers.host || "rickypassword.com";
-  const proto = (req.headers["x-forwarded-proto"] || "https").split(",")[0];
-  const url = `${proto}://${host}/news.json`;
-
+async function loadItems(baseUrl) {
   try {
-    const r = await fetch(url, { cache: "no-store" });
+    const r = await fetch(new URL("/news.json", baseUrl), { cache: "no-store" });
     if (r.ok) {
       const data = await r.json();
-      if (Array.isArray(data?.items)) return data.items;   // your file has { ok, count, items }
-      if (Array.isArray(data)) return data;                // also accept raw array
+      if (Array.isArray(data?.items)) return data.items; // supports { ok, count, items }
+      if (Array.isArray(data)) return data;              // supports raw array
     }
   } catch {}
-
-  // optional fallback if bundled
   try {
     const mod = await import("../../src/data/news.js");
     const arr = mod?.NEWS ?? mod?.default;
