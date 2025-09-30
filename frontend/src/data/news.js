@@ -19,9 +19,9 @@ Fans are eagerly waiting, and with such a strong collaboration in the works, exp
     images_share: [
       'https://rickypassword.com/gallery/studio_session_1.jpg',
       'https://rickypassword.com/gallery/studio_session_2.jpg',
+      'https://rickypassword.com/gallery/studio_session_3.jpg',
       'https://rickypassword.com/gallery/studio_session_4.jpg',
-      'https://rickypassword.com/gallery/studio_session_4.jpg',
-      'https://rickypassword.com/gallery/studio_session_4.jpg'
+      'https://rickypassword.com/gallery/studio_session_5.jpg'
     ],
     show_gallery: false
   },
