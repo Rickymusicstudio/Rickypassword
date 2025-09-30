@@ -7,7 +7,7 @@ export const NEWS = [
     excerpt: 'Ricky Password Back in the Studio with Hit Producer Kozee',
     cover_url: 'https://rickypassword.com/gallery/studio_session_1.jpg',
     content: `
-After a long break from music , Rwandan music artist Ricky Password has returned to the studio. Known for his unique sound and passion for exploring new creative directions, Ricky says he has always wanted to collaborate with Rwanda’s new generation of producers.
+After a long break from music , Rwandan music artist Ricky Password has returned to the studio. Known for his unique sound and passion for exploring new creative directions, Ricky says he has always wanted to collaborate with Rwanda’s current producers.
 “I want to see how my music would sound with the touch of one of Rwanda’s hit makers, Kozee. I like his music style and I really wanted to work with him,” Ricky explained.
 Kozee is no stranger to the music scene—he is the producer behind “Ni Forever,” one of The Ben’s biggest hit songs. The collaboration between Ricky Password and Kozee promises to blend Ricky’s seasoned artistry with Kozee’s modern, hit-making sound.
 The project is being recorded at Country records, where both Ricky and Kozee have already started laying the foundation for what could become one of the standout Rwandan releases of the year.
