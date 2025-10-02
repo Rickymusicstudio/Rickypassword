@@ -2,6 +2,7 @@
 import { useMemo, useState, useEffect } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import { NEWS } from '../data/news'
+import { adminApi } from '../lib/adminApi' // make sure adminApi.trackView exists
 
 const fmtDate = (d) =>
   new Date(d).toLocaleDateString(undefined, {
@@ -291,7 +292,9 @@ function Article({ post, first = false, isShare = false }) {
 export default function NewsPost() {
   const { slug } = useParams()
   const location = useLocation()
-  const isShare = location.pathname.startsWith('/share/news/')
+
+  // Support both /share/news/:slug and the short /n/:slug
+  const isShare = location.pathname.startsWith('/share/news/') || location.pathname.startsWith('/n/')
 
   const sorted = useMemo(() => [...NEWS].sort((a, b) => new Date(b.date) - new Date(a.date)), [])
   const ordered = useMemo(() => {
@@ -299,6 +302,23 @@ export default function NewsPost() {
     if (idx === -1) return sorted
     return [sorted[idx], ...sorted.filter((_, i) => i !== idx)]
   }, [slug, sorted])
+
+  // 🔹 Track a view once per day per slug to avoid double-count on refreshes
+  useEffect(() => {
+    if (!slug) return
+    try {
+      const day = new Date().toISOString().slice(0, 10)
+      const key = `rp:view:${slug}:${day}`
+      const already = sessionStorage.getItem(key)
+      if (!already) {
+        sessionStorage.setItem(key, '1')
+        adminApi.trackView(slug).catch(() => {})
+      }
+    } catch {
+      // if storage blocked, still attempt to send once
+      adminApi.trackView(slug).catch(() => {})
+    }
+  }, [slug])
 
   return (
     <div className="section-white">

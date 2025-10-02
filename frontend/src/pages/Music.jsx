@@ -1,6 +1,5 @@
 // src/pages/Music.jsx
 import { useMemo, useState, useEffect } from 'react'
-import { songs as rawSongs } from '../data/songs'
 
 // ======= CONFIG: your real links
 const SOCIAL_LINKS = {
@@ -8,14 +7,15 @@ const SOCIAL_LINKS = {
   instagram: 'https://www.instagram.com/rickypassword/',
 }
 
+// API base (same pattern you use for adminApi)
+const API_BASE =
+  (import.meta?.env?.VITE_API_BASE?.replace(/\/$/, '')) ||
+  'http://localhost:4000'
+
 // ======= Safe localStorage helpers
 const ls = {
-  get(k) {
-    try { return window.localStorage.getItem(k) } catch { return null }
-  },
-  set(k, v) {
-    try { window.localStorage.setItem(k, v) } catch {}
-  },
+  get(k) { try { return window.localStorage.getItem(k) } catch { return null } },
+  set(k, v) { try { window.localStorage.setItem(k, v) } catch {} },
 }
 
 // ======= Helpers
@@ -26,7 +26,7 @@ const safeUrl = (u = '') => {
 }
 const toFileName = (t = 'track') => `${t.replace(/[^\w\-]+/g, '_')}.mp3`
 
-// ======= Subscribe Gate Modal
+// ========= Subscribe Gate Modal =========
 function GateModal({ open, onClose, onUnlocked }) {
   const [yt, setYt] = useState(false)
   const [ig, setIg] = useState(false)
@@ -76,11 +76,7 @@ function GateModal({ open, onClose, onUnlocked }) {
           <button
             className="btn"
             disabled={!canContinue}
-            onClick={() => {
-              if (!canContinue) return
-              ls.set('rp_unlock_v1', '1') // remember unlock
-              onUnlocked()
-            }}
+            onClick={() => { if (canContinue) { ls.set('rp_unlock_v1', '1'); onUnlocked() } }}
             style={{ opacity: canContinue ? 1 : .5 }}
           >
             Continue
@@ -91,7 +87,7 @@ function GateModal({ open, onClose, onUnlocked }) {
   )
 }
 
-// ======= Audio Player Modal
+// ========= Audio Player Modal =========
 function PlayerModal({ open, onClose, title, src }) {
   if (!open) return null
   return (
@@ -115,25 +111,58 @@ function PlayerModal({ open, onClose, title, src }) {
   )
 }
 
-// ======= Page
+// ========= Page =========
 export default function Music() {
+  const [tracks, setTracks] = useState([])         // <-- from API
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
   const [player, setPlayer] = useState({ open: false, title: '', src: '' })
   const [gateOpen, setGateOpen] = useState(false)
   const [unlocked, setUnlocked] = useState(false)
   const [pending, setPending] = useState(null) // { type: 'listen'|'download', track }
 
-  // On mount, auto-unlock if previously done or both platform flags already set
+  // On mount, auto-unlock if previously done
   useEffect(() => {
     const hadUnlock = ls.get('rp_unlock_v1') === '1'
     const alreadySubbed = ls.get('rp_sub_yt') === '1' && ls.get('rp_sub_ig') === '1'
     if (hadUnlock || alreadySubbed) setUnlocked(true)
   }, [])
 
-  // newest first, skip hidden
-  const tracks = useMemo(() => {
-    return [...rawSongs]
-      .filter(s => !!s && !s.hidden)
-      .sort((a, b) => new Date(b.released_at || 0) - new Date(a.released_at || 0))
+  // Fetch releases
+  useEffect(() => {
+    let abort = false
+    ;(async () => {
+      try {
+        setLoading(true)
+        const r = await fetch(`${API_BASE}/api/releases`, { credentials: 'include' })
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        const list = await r.json()
+
+        // Normalize to what the UI expects
+        const norm = (list || []).map((x) => ({
+          sku: x.sku || x.id,
+          title: x.title,
+          cover_url: x.cover_url || '/cover.jpg',
+          released_at: x.release_date || null,
+          media_path: x.media_path || '',     // download target
+          preview_url: x.preview_url || x.media_path || '', // listen target (fallback)
+          hidden: x.is_published === false,
+        }))
+
+        if (!abort) {
+          // newest first (already server-ordered, but keep it deterministic)
+          norm.sort((a, b) => new Date(b.released_at || 0) - new Date(a.released_at || 0))
+          setTracks(norm.filter(t => !t.hidden))
+          setError(null)
+        }
+      } catch (e) {
+        if (!abort) setError('Failed to load releases'); // keep minimal UI
+      } finally {
+        if (!abort) setLoading(false)
+      }
+    })()
+    return () => { abort = true }
   }, [])
 
   const fmtDate = (d) =>
@@ -178,48 +207,52 @@ export default function Music() {
 
   return (
     <main className="music-page">
-      {/* Page header aligned to site gutters */}
       <header className="page-head">
         <div className="container">
           <h1 className="page-title">Music</h1>
         </div>
       </header>
 
-      {/* Content */}
       <section>
         <div className="container">
-          <div className="music-grid">
-            {tracks.map((t, i) => (
-              <figure className="release-card" key={t.sku || i}>
-                <div className="release-media" style={{ position: 'relative' }}>
-                  <img
-                    src={safeUrl(t.cover_url || '/cover.jpg')}
-                    alt={`${t.title} cover art`}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div className="release-overlay" />
-                  <div className="release-actions" style={{ position: 'absolute', display: 'flex' }}>
-                    <button
-                      className="btn btn-solid"
-                      onClick={() => requireUnlock({ type: 'listen', track: t })}
-                    >
-                      Listen
-                    </button>
-                    <button
-                      className="btn"
-                      onClick={() => requireUnlock({ type: 'download', track: t })}
-                    >
-                      Download
-                    </button>
+          {loading && <div style={{ opacity: .7 }}>Loading releases…</div>}
+          {error && !loading && <div style={{ color: 'crimson' }}>{error}</div>}
+
+          {!loading && !error && (
+            <div className="music-grid">
+              {tracks.map((t, i) => (
+                <figure className="release-card" key={t.sku || i}>
+                  <div className="release-media" style={{ position: 'relative' }}>
+                    <img
+                      src={safeUrl(t.cover_url || '/cover.jpg')}
+                      alt={`${t.title} cover art`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="release-overlay" />
+                    <div className="release-actions" style={{ position: 'absolute', display: 'flex' }}>
+                      <button
+                        className="btn btn-solid"
+                        onClick={() => requireUnlock({ type: 'listen', track: t })}
+                      >
+                        Listen
+                      </button>
+                      <button
+                        className="btn"
+                        onClick={() => requireUnlock({ type: 'download', track: t })}
+                      >
+                        Download
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <figcaption className="release-caption">
-                  {t.title} {fmtDate(t.released_at) ? `• ${fmtDate(t.released_at)}` : ''}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+                  <figcaption className="release-caption">
+                    {t.title} {fmtDate(t.released_at) ? `• ${fmtDate(t.released_at)}` : ''}
+                  </figcaption>
+                </figure>
+              ))}
+              {tracks.length === 0 && <div style={{ opacity: .7 }}>No releases yet.</div>}
+            </div>
+          )}
         </div>
       </section>
 
