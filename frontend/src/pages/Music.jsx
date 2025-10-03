@@ -7,10 +7,19 @@ const SOCIAL_LINKS = {
   instagram: 'https://www.instagram.com/rickypassword/',
 }
 
-// API base (same pattern you use for adminApi)
+// ======= API base (match Vercel env var)
+const isLocal =
+  typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' ||
+   window.location.hostname === '127.0.0.1')
+
 const API_BASE =
-  (import.meta?.env?.VITE_API_BASE?.replace(/\/$/, '')) ||
-  'http://localhost:4000'
+  (import.meta?.env?.VITE_API_URL?.replace(/\/$/, '')) ||
+  (isLocal ? 'http://localhost:4000' : 'https://rickypassword.onrender.com')
+
+// debug (remove later)
+// eslint-disable-next-line no-console
+console.log('[music] API_BASE =', API_BASE)
 
 // ======= Safe localStorage helpers
 const ls = {
@@ -18,12 +27,24 @@ const ls = {
   set(k, v) { try { window.localStorage.setItem(k, v) } catch {} },
 }
 
-// ======= Helpers
-const safeUrl = (u = '') => {
+// ======= URL helpers
+/**
+ * Resolve a URL for media (audio/images) that may come as:
+ *  - absolute (https://...)  -> returned as-is
+ *  - root-relative (/path)   -> served from API host (except known frontend assets)
+ *  - relative (path)         -> served from API host
+ *
+ * Special-case: '/cover.jpg' stays on the frontend public folder.
+ */
+const mediaUrl = (u = '') => {
   if (!u) return ''
-  const url = u.startsWith('/') ? u : `/${u}`
-  return encodeURI(url)
+  if (/^https?:\/\//i.test(u)) return u // absolute, keep
+  if (u === '/cover.jpg') return '/cover.jpg' // frontend public asset
+
+  const path = u.startsWith('/') ? u : `/${u}`
+  return `${API_BASE}${encodeURI(path)}`
 }
+
 const toFileName = (t = 'track') => `${t.replace(/[^\w\-]+/g, '_')}.mp3`
 
 // ========= Subscribe Gate Modal =========
@@ -100,7 +121,7 @@ function PlayerModal({ open, onClose, title, src }) {
         </div>
         {src ? (
           <audio controls autoPlay style={{ width: '100%' }}>
-            <source src={safeUrl(src)} />
+            <source src={mediaUrl(src)} />
             Your browser does not support the audio element.
           </audio>
         ) : (
@@ -145,7 +166,7 @@ export default function Music() {
           title: x.title,
           cover_url: x.cover_url || '/cover.jpg',
           released_at: x.release_date || null,
-          media_path: x.media_path || '',     // download target
+          media_path: x.media_path || '',     // download target (relative path)
           preview_url: x.preview_url || x.media_path || '', // listen target (fallback)
           hidden: x.is_published === false,
         }))
@@ -157,7 +178,7 @@ export default function Music() {
           setError(null)
         }
       } catch (e) {
-        if (!abort) setError('Failed to load releases'); // keep minimal UI
+        if (!abort) setError('Failed to load releases') // minimal UI
       } finally {
         if (!abort) setLoading(false)
       }
@@ -175,7 +196,7 @@ export default function Music() {
     const url = t.media_path || t.preview_url
     if (!url) return alert('No file configured yet.')
     const a = document.createElement('a')
-    a.href = safeUrl(url)
+    a.href = mediaUrl(url)
     a.setAttribute('download', toFileName(t.title))
     document.body.appendChild(a); a.click(); a.remove()
   }
@@ -224,7 +245,7 @@ export default function Music() {
                 <figure className="release-card" key={t.sku || i}>
                   <div className="release-media" style={{ position: 'relative' }}>
                     <img
-                      src={safeUrl(t.cover_url || '/cover.jpg')}
+                      src={mediaUrl(t.cover_url || '/cover.jpg')}
                       alt={`${t.title} cover art`}
                       loading="lazy"
                       decoding="async"
