@@ -1,5 +1,5 @@
 // src/pages/Music.jsx
-import { useMemo, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 // ======= CONFIG: your real links
 const SOCIAL_LINKS = {
@@ -29,20 +29,16 @@ const ls = {
 
 // ======= URL helpers
 /**
- * Resolve a URL for media (audio/images) that may come as:
- *  - absolute (https://...)  -> returned as-is
- *  - root-relative (/path)   -> served from API host (except known frontend assets)
- *  - relative (path)         -> served from API host
- *
- * Special-case: '/cover.jpg' stays on the frontend public folder.
+ * Resolve media URLs:
+ *  - absolute (https://...) -> returned as-is
+ *  - root-relative (/audio/..., /covers/...) -> stay on site origin (Vercel)
+ *  - relative (releases/abc.mp3) -> served from API host (Render)
  */
 const mediaUrl = (u = '') => {
   if (!u) return ''
-  if (/^https?:\/\//i.test(u)) return u // absolute, keep
-  if (u === '/cover.jpg') return '/cover.jpg' // frontend public asset
-
-  const path = u.startsWith('/') ? u : `/${u}`
-  return `${API_BASE}${encodeURI(path)}`
+  if (/^https?:\/\//i.test(u)) return u            // absolute
+  if (u.startsWith('/')) return encodeURI(u)       // keep on site
+  return `${API_BASE}/${encodeURI(u.replace(/^\//, ''))}`
 }
 
 const toFileName = (t = 'track') => `${t.replace(/[^\w\-]+/g, '_')}.mp3`
@@ -160,19 +156,18 @@ export default function Music() {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         const list = await r.json()
 
-        // Normalize to what the UI expects
+        // Normalize to what the UI expects (handles both DB and songs.js output)
         const norm = (list || []).map((x) => ({
-          sku: x.sku || x.id,
-          title: x.title,
+          sku: x.sku ?? x.id,
+          title: x.title ?? '',
           cover_url: x.cover_url || '/cover.jpg',
-          released_at: x.release_date || null,
-          media_path: x.media_path || '',     // download target (relative path)
-          preview_url: x.preview_url || x.media_path || '', // listen target (fallback)
+          released_at: x.release_date ?? x.released_at ?? null,
+          media_path: x.media_path ?? '',
+          preview_url: x.preview_url ?? x.media_path ?? '',
           hidden: x.is_published === false,
         }))
 
         if (!abort) {
-          // newest first (already server-ordered, but keep it deterministic)
           norm.sort((a, b) => new Date(b.released_at || 0) - new Date(a.released_at || 0))
           setTracks(norm.filter(t => !t.hidden))
           setError(null)

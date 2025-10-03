@@ -1,28 +1,19 @@
 // backend/routes/releases.js
 import { Router } from "express";
-import { supabaseService } from "../supabaseClient.js";
+// Pull the curated songs list from the frontend data file
+// (path is from backend/routes/ -> ../../frontend/src/data/songs.js)
+import { songs as SONGS } from "../../frontend/src/data/songs.js";
 
 const router = Router();
 
 const first = (...vals) => vals.find(v => v !== undefined && v !== null && v !== "");
 
-/**
- * GET /api/releases
- * - Avoids selecting non-existent columns (select("*")).
- * - Normalizes varying schemas to { id, sku, title, cover_url, preview_url, media_path, release_date, is_published }.
- * - Filters out unpublished (if the flag exists) and sorts by date (desc) if present.
- */
 router.get("/", async (_req, res) => {
   try {
-    const { data, error } = await supabaseService
-      .from("releases")
-      .select("*"); // <-- key change: don't list columns that might not exist
+    const rows = Array.isArray(SONGS) ? SONGS : [];
 
-    if (error) return res.status(500).json({ error: error.message });
-
-    const rows = Array.isArray(data) ? data : [];
-
-    const normalized = rows.map((r) => {
+    // Normalize to the shape the frontend expects
+    const normalized = rows.map((r, idx) => {
       const media_path = first(
         r.media_path,
         r.media,
@@ -52,11 +43,13 @@ router.get("/", async (_req, res) => {
       const release_date = first(
         r.release_date,
         r.released_at,
+        r.released_at,  // some items use this
         r.date,
         r.created_at,
         null
       );
 
+      // published flag (default true)
       const is_published =
         typeof r.is_published === "boolean"
           ? r.is_published
@@ -65,8 +58,8 @@ router.get("/", async (_req, res) => {
           : true;
 
       return {
-        id: first(r.id, r.sku),
-        sku: first(r.sku, r.id),
+        id: first(r.id, r.sku, idx + 1),
+        sku: first(r.sku, r.id, `SKU-${idx + 1}`),
         title: first(r.title, r.name, ""),
         type: first(r.type, r.kind, "single"),
         description: first(r.description, ""),
@@ -79,63 +72,11 @@ router.get("/", async (_req, res) => {
       };
     });
 
-    const published = normalized.filter((x) => x.is_published !== false);
-    published.sort(
-      (a, b) =>
-        new Date(b.release_date || 0) - new Date(a.release_date || 0)
-    );
+    // Filter unpublished and sort newest first
+    const published = normalized.filter(x => x.is_published !== false);
+    published.sort((a, b) => new Date(b.release_date || 0) - new Date(a.release_date || 0));
 
     res.json(published);
-  } catch (e) {
-    res.status(500).json({ error: e?.message || "Server error" });
-  }
-});
-
-/**
- * POST /api/releases/admin
- * Note: this will fail if your table doesn't have these columns.
- * Either add them in DB, or trim this insert to match your schema.
- */
-router.post("/admin", async (req, res) => {
-  try {
-    const {
-      title,
-      type,
-      cover_url,
-      release_date,
-      description,
-      price_cents = 0,
-      is_published = false,
-      media_path = null,
-      preview_url = null,
-      sku = null,
-    } = req.body || {};
-
-    if (!title) {
-      return res.status(400).json({ error: "title is required" });
-    }
-
-    const { data, error } = await supabaseService
-      .from("releases")
-      .insert([
-        {
-          title,
-          type,
-          cover_url,
-          release_date,
-          description,
-          price_cents,
-          is_published,
-          media_path,
-          preview_url,
-          sku,
-        },
-      ])
-      .select("*")
-      .single();
-
-    if (error) return res.status(500).json({ error: error.message });
-    res.status(201).json(data);
   } catch (e) {
     res.status(500).json({ error: e?.message || "Server error" });
   }
