@@ -1,15 +1,23 @@
+// src/lib/api.js
 import axios from "axios";
 
-// Base URL depends on environment
-const BASE_URL =
-  import.meta.env.MODE === "development"
-    ? "http://localhost:4000"
-    : "https://rickypassword.onrender.com";
+// figure out where the backend lives
+const isLocal =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+   window.location.hostname === "127.0.0.1");
 
-// Axios instance with baseURL
+// Prefer env; fall back to localhost in dev, Render in prod
+const API_BASE =
+  (import.meta.env.VITE_API_URL &&
+    import.meta.env.VITE_API_URL.replace(/\/$/, "")) ||
+  (isLocal ? "http://localhost:4000" : "https://rickypassword.onrender.com");
+
+// one axios instance for everything
 const http = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_BASE,     // <-- critical
   timeout: 10000,
+  withCredentials: true, // ok even if not used; CORS must allow credentials
 });
 
 /** Small helper: ensure an array back to callers */
@@ -25,14 +33,17 @@ const resolvePreviewUrl = (item) => {
 
   if (!cand) return "";
 
-  if (/^https?:\/\//i.test(cand) || cand.startsWith("/")) return cand;
+  // Absolute http(s) or already rooted to some host
+  if (/^https?:\/\//i.test(cand)) return cand;
 
-  return `/${cand}`;
+  // If it begins with "/", root it at our API host; else treat as relative path on API host
+  const path = cand.startsWith("/") ? cand.slice(1) : cand;
+  return `${API_BASE}/${path}`;
 };
 
-/** Build a download URL */
+/** Build a download URL on the API host */
 const buildDownloadUrl = ({ sku, order_id }) => {
-  let url = `/api/download?sku=${encodeURIComponent(sku)}`;
+  let url = `${API_BASE}/api/download?sku=${encodeURIComponent(sku)}`;
   if (order_id) url += `&order_id=${encodeURIComponent(order_id)}`;
   return url;
 };
@@ -48,7 +59,10 @@ export const api = {
       const { data } = await http.get("/api/products");
       return Array.isArray(data) ? data : asArray(data);
     } catch (e) {
-      console.warn("GET /api/products failed → []", e?.response?.data || e.message);
+      console.warn(
+        "GET /api/products failed → []",
+        e?.response?.data || e.message
+      );
       return [];
     }
   },
@@ -58,12 +72,16 @@ export const api = {
       const { data } = await http.get("/api/releases");
       return Array.isArray(data) ? data : asArray(data);
     } catch (e) {
-      console.warn("GET /api/releases failed → []", e?.response?.data || e.message);
+      console.warn(
+        "GET /api/releases failed → []",
+        e?.response?.data || e.message
+      );
       return [];
     }
   },
 
   async checkoutDev(payload) {
+    // expected dev response: { order_id, download_url? , ... }
     const { data } = await http.post("/api/checkout/dev", payload);
     return data;
   },
