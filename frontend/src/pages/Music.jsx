@@ -1,25 +1,12 @@
 // src/pages/Music.jsx
 import { useState, useEffect } from 'react'
+import { SONGS } from '../data/songs'
 
 // ======= CONFIG: your real links
 const SOCIAL_LINKS = {
   youtube: 'https://youtube.com/@rickypasswordrwa?si=hJBfh9Ed7_JnlZhx',
   instagram: 'https://www.instagram.com/rickypassword/',
 }
-
-// ======= API base (match Vercel env var)
-const isLocal =
-  typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' ||
-   window.location.hostname === '127.0.0.1')
-
-const API_BASE =
-  (import.meta?.env?.VITE_API_URL?.replace(/\/$/, '')) ||
-  (isLocal ? 'http://localhost:4000' : 'https://rickypassword.onrender.com')
-
-// debug (remove later)
-// eslint-disable-next-line no-console
-console.log('[music] API_BASE =', API_BASE)
 
 // ======= Safe localStorage helpers
 const ls = {
@@ -31,14 +18,12 @@ const ls = {
 /**
  * Resolve media URLs:
  *  - absolute (https://...) -> returned as-is
- *  - root-relative (/audio/..., /covers/...) -> stay on site origin (Vercel)
- *  - relative (releases/abc.mp3) -> served from API host (Render)
+ *  - others -> ensure root-relative (prefix "/")
  */
 const mediaUrl = (u = '') => {
   if (!u) return ''
-  if (/^https?:\/\//i.test(u)) return u            // absolute
-  if (u.startsWith('/')) return encodeURI(u)       // keep on site
-  return `${API_BASE}/${encodeURI(u.replace(/^\//, ''))}`
+  if (/^https?:\/\//i.test(u)) return u
+  return encodeURI(u.startsWith('/') ? u : `/${u}`)
 }
 
 const toFileName = (t = 'track') => `${t.replace(/[^\w\-]+/g, '_')}.mp3`
@@ -130,55 +115,33 @@ function PlayerModal({ open, onClose, title, src }) {
 
 // ========= Page =========
 export default function Music() {
-  const [tracks, setTracks] = useState([])         // <-- from API
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  const [player, setPlayer] = useState({ open: false, title: '', src: '' })
+  const [tracks, setTracks] = useState([])
   const [gateOpen, setGateOpen] = useState(false)
-  const [unlocked, setUnlocked] = useState(false)
   const [pending, setPending] = useState(null) // { type: 'listen'|'download', track }
+  const [player, setPlayer] = useState({ open: false, title: '', src: '' })
 
-  // On mount, auto-unlock if previously done
+  // On mount, load from local songs.js and respect prior unlock
   useEffect(() => {
+    // auto-unlock if previously done
     const hadUnlock = ls.get('rp_unlock_v1') === '1'
     const alreadySubbed = ls.get('rp_sub_yt') === '1' && ls.get('rp_sub_ig') === '1'
-    if (hadUnlock || alreadySubbed) setUnlocked(true)
-  }, [])
+    if (hadUnlock || alreadySubbed) {
+      // no-op here; gating checks read directly from ls
+    }
 
-  // Fetch releases
-  useEffect(() => {
-    let abort = false
-    ;(async () => {
-      try {
-        setLoading(true)
-        const r = await fetch(`${API_BASE}/api/releases`, { credentials: 'include' })
-        if (!r.ok) throw new Error(`HTTP ${r.status}`)
-        const list = await r.json()
+    // normalize SONGS -> tracks expected by UI
+    const norm = (SONGS || []).map((x) => ({
+      sku: x.sku ?? x.id ?? x.title,
+      title: x.title ?? '',
+      cover_url: x.cover_url ?? x.cover ?? '/cover.jpg',
+      released_at: x.released_at ?? x.release_date ?? null,
+      media_path: x.media_path ?? x.audio ?? '',
+      preview_url: x.preview_url ?? x.audio ?? x.media_path ?? '',
+      hidden: x.hidden === true || x.is_published === false,
+    }))
 
-        // Normalize to what the UI expects (handles both DB and songs.js output)
-        const norm = (list || []).map((x) => ({
-          sku: x.sku ?? x.id,
-          title: x.title ?? '',
-          cover_url: x.cover_url || '/cover.jpg',
-          released_at: x.release_date ?? x.released_at ?? null,
-          media_path: x.media_path ?? '',
-          preview_url: x.preview_url ?? x.media_path ?? '',
-          hidden: x.is_published === false,
-        }))
-
-        if (!abort) {
-          norm.sort((a, b) => new Date(b.released_at || 0) - new Date(a.released_at || 0))
-          setTracks(norm.filter(t => !t.hidden))
-          setError(null)
-        }
-      } catch (e) {
-        if (!abort) setError('Failed to load releases') // minimal UI
-      } finally {
-        if (!abort) setLoading(false)
-      }
-    })()
-    return () => { abort = true }
+    norm.sort((a, b) => new Date(b.released_at || 0) - new Date(a.released_at || 0))
+    setTracks(norm.filter(t => !t.hidden))
   }, [])
 
   const fmtDate = (d) =>
@@ -201,7 +164,6 @@ export default function Music() {
 
   const requireUnlock = (intent) => {
     if (isUnlocked()) {
-      setUnlocked(true)
       if (intent?.type === 'listen') doListen(intent.track)
       else if (intent?.type === 'download') doDownload(intent.track)
       return
@@ -212,7 +174,6 @@ export default function Music() {
 
   const handleUnlocked = () => {
     setGateOpen(false)
-    setUnlocked(true)
     if (pending) {
       const p = pending
       setPending(null)
@@ -231,44 +192,39 @@ export default function Music() {
 
       <section>
         <div className="container">
-          {loading && <div style={{ opacity: .7 }}>Loading releases…</div>}
-          {error && !loading && <div style={{ color: 'crimson' }}>{error}</div>}
-
-          {!loading && !error && (
-            <div className="music-grid">
-              {tracks.map((t, i) => (
-                <figure className="release-card" key={t.sku || i}>
-                  <div className="release-media" style={{ position: 'relative' }}>
-                    <img
-                      src={mediaUrl(t.cover_url || '/cover.jpg')}
-                      alt={`${t.title} cover art`}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="release-overlay" />
-                    <div className="release-actions" style={{ position: 'absolute', display: 'flex' }}>
-                      <button
-                        className="btn btn-solid"
-                        onClick={() => requireUnlock({ type: 'listen', track: t })}
-                      >
-                        Listen
-                      </button>
-                      <button
-                        className="btn"
-                        onClick={() => requireUnlock({ type: 'download', track: t })}
-                      >
-                        Download
-                      </button>
-                    </div>
+          <div className="music-grid">
+            {tracks.map((t, i) => (
+              <figure className="release-card" key={t.sku || i}>
+                <div className="release-media" style={{ position: 'relative' }}>
+                  <img
+                    src={mediaUrl(t.cover_url || '/cover.jpg')}
+                    alt={`${t.title} cover art`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="release-overlay" />
+                  <div className="release-actions" style={{ position: 'absolute', display: 'flex' }}>
+                    <button
+                      className="btn btn-solid"
+                      onClick={() => requireUnlock({ type: 'listen', track: t })}
+                    >
+                      Listen
+                    </button>
+                    <button
+                      className="btn"
+                      onClick={() => requireUnlock({ type: 'download', track: t })}
+                    >
+                      Download
+                    </button>
                   </div>
-                  <figcaption className="release-caption">
-                    {t.title} {fmtDate(t.released_at) ? `• ${fmtDate(t.released_at)}` : ''}
-                  </figcaption>
-                </figure>
-              ))}
-              {tracks.length === 0 && <div style={{ opacity: .7 }}>No releases yet.</div>}
-            </div>
-          )}
+                </div>
+                <figcaption className="release-caption">
+                  {t.title} {fmtDate(t.released_at) ? `• ${fmtDate(t.released_at)}` : ''}
+                </figcaption>
+              </figure>
+            ))}
+            {tracks.length === 0 && <div style={{ opacity: .7 }}>No music yet.</div>}
+          </div>
         </div>
       </section>
 
