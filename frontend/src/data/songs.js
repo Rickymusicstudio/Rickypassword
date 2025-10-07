@@ -54,13 +54,20 @@ export const songs = [
   },
 
  {
-    sku: 'PRETEND-MP3',
-    title: 'PRETEND FT GABIRO',
-    cover_url: '/covers/pretend.jpg', // .jpg or .png as on disk
-    preview_url: '/audio/Pretend ft Gabiro.mp3',
-    media_path:  '/Pretend ft Gabiro.mp3',
-    released_at: '2022-06-21',
-  },
+  sku: 'PRETEND-MP3',
+  title: 'PRETEND FT GABIRO',
+  cover_url: '/covers/pretend.jpg',
+  preview_url: '/audio/Pretend ft Gabiro.mp3',
+  media_path:  '/audio/Pretend ft Gabiro.mp3', // fixed path
+  released_at: '2022-06-21',
+
+  // 🔒 YouTube-only playback (opens YT on click, no site audio)
+  youtube_only: true,
+  youtube_url: 'https://www.youtube.com/watch?v=WyBHWYu6Pl0', // put the real video URL
+
+  // ⛔ Explicitly disable download (extra safety, though YT-only already hides it)
+  can_download: false,
+},
 
  {
     sku: 'NAKUJYUNA-MP3',

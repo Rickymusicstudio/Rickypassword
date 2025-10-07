@@ -1,13 +1,11 @@
 // src/pages/Music.jsx
 import { useState, useEffect } from 'react'
-import * as songsModule from '../data/songs'   // works for named OR default export
+import * as songsModule from '../data/songs'
 
-/* ----------------- pull songs no matter how it's exported ----------------- */
+// pull songs no matter how it's exported
 function getSongsArray(mod) {
-  // accepts: export const SONGS = [];  OR  export default [];
   if (Array.isArray(mod.default)) return mod.default
   if (Array.isArray(mod.SONGS)) return mod.SONGS
-  // some people export as { songs: [...] }
   if (Array.isArray(mod.songs)) return mod.songs
   return []
 }
@@ -23,9 +21,10 @@ const ls = {
   set(k,v){ try{ window.localStorage.setItem(k,v)}catch{} },
 }
 
+const isHttpUrl = (u='') => /^https?:\/\//i.test(u)
 const mediaUrl = (u='') => {
   if (!u) return ''
-  if (/^https?:\/\//i.test(u)) return u
+  if (isHttpUrl(u)) return u
   return encodeURI(u.startsWith('/') ? u : `/${u}`)
 }
 const toFileName = (t='track') => `${t.replace(/[^\w\-]+/g,'_')}.mp3`
@@ -115,15 +114,22 @@ export default function Music() {
     try {
       const RAW = getSongsArray(songsModule)
 
-      const norm = (RAW || []).map((x) => ({
-        sku: x.sku ?? x.id ?? x.title,
-        title: x.title ?? '',
-        cover_url: x.cover_url ?? x.cover ?? '/cover.jpg',
-        released_at: x.released_at ?? x.release_date ?? null,
-        media_path: x.media_path ?? x.audio ?? '',
-        preview_url: x.preview_url ?? x.audio ?? x.media_path ?? '',
-        hidden: x.hidden === true || x.is_published === false,
-      }))
+      const norm = (RAW || []).map((x) => {
+        const youtubeUrl = x.youtube_url ?? x.youtube ?? ''
+        const ytOnly = x.youtube_only === true || x.listen === 'youtube'
+        return {
+          sku: x.sku ?? x.id ?? x.title,
+          title: x.title ?? '',
+          cover_url: x.cover_url ?? x.cover ?? '/cover.jpg',
+          released_at: x.released_at ?? x.release_date ?? null,
+          media_path: x.media_path ?? x.audio ?? '',
+          preview_url: x.preview_url ?? x.audio ?? x.media_path ?? '',
+          youtube_url: youtubeUrl,
+          ytOnly,
+          hidden: x.hidden === true || x.is_published === false,
+          can_download: x.can_download !== false && !ytOnly,
+        }
+      })
 
       norm.sort((a,b) => new Date(b.released_at || 0) - new Date(a.released_at || 0))
       setTracks(norm.filter(t => !t.hidden))
@@ -137,9 +143,19 @@ export default function Music() {
   const fmtDate = (d) =>
     d ? new Date(d).toLocaleString(undefined, { month:'short', year:'numeric' }) : ''
 
-  const doListen = (t) => setPlayer({ open:true, title:t.title, src:t.preview_url || t.media_path || '' })
+  const openYouTube = (t) => {
+    const url = t.youtube_url || SOCIAL_LINKS.youtube
+    if (!url) return alert('No YouTube URL configured.')
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+
+  const doListen = (t) => {
+    if (t.ytOnly) return openYouTube(t)
+    setPlayer({ open:true, title:t.title, src:t.preview_url || t.media_path || '' })
+  }
 
   const doDownload = (t) => {
+    if (!t.can_download) return
     const url = t.media_path || t.preview_url
     if (!url) return alert('No file configured yet.')
     const a = document.createElement('a')
@@ -152,6 +168,11 @@ export default function Music() {
     ls.get('rp_unlock_v1') === '1' || (ls.get('rp_sub_yt') === '1' && ls.get('rp_sub_ig') === '1')
 
   const requireUnlock = (intent) => {
+    // Always allow YouTube-only tracks without the subscription gate
+    if (intent?.track?.ytOnly) {
+      if (intent.type === 'listen') doListen(intent.track)
+      return
+    }
     if (isUnlocked()) {
       if (intent?.type === 'listen') doListen(intent.track)
       else if (intent?.type === 'download') doDownload(intent.track)
@@ -192,17 +213,43 @@ export default function Music() {
                     decoding="async"
                   />
                   <div className="release-overlay" />
+
                   <div className="release-actions" style={{ position:'absolute', display:'flex' }}>
-                    <button className="btn btn-solid" onClick={() => requireUnlock({ type:'listen', track:t })}>
-                      Listen
-                    </button>
-                    <button className="btn" onClick={() => requireUnlock({ type:'download', track:t })}>
-                      Download
-                    </button>
+                    {t.ytOnly ? (
+                      <a
+                        className="btn btn-solid"
+                        href={t.youtube_url || SOCIAL_LINKS.youtube}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => { e.stopPropagation() }}
+                      >
+                        Watch on YouTube
+                      </a>
+                    ) : (
+                      <>
+                        <button
+                          className="btn btn-solid"
+                          onClick={() => requireUnlock({ type:'listen', track:t })}
+                        >
+                          Listen
+                        </button>
+                        {t.can_download ? (
+                          <button className="btn" onClick={() => requireUnlock({ type:'download', track:t })}>
+                            Download
+                          </button>
+                        ) : (
+                          <button className="btn" disabled title="Download disabled for this track">
+                            Download
+                          </button>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
+
                 <figcaption className="release-caption">
                   {t.title} {fmtDate(t.released_at) ? `• ${fmtDate(t.released_at)}` : ''}
+                  {t.ytOnly && <span style={{ marginLeft:8, fontSize:12, opacity:.8 }}>(YouTube only)</span>}
                 </figcaption>
               </figure>
             ))}
