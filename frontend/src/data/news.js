@@ -10,7 +10,7 @@ slug: 'ibyahishuwe-movie-premiere-7pm-zacu-tv',
     cover_url: 'https://rickypassword.com/gallery/ibyahishuwe5.jpg',
     content: `
 The long-awaited moment has finally arrived! The IBYAHISHUWE Movie is set to premiere tonight at 7 PM exclusively on ZACU TV, as officially announced by the movie’s production team.
-Fans across Rwanda and beyond are buzzing with excitement — not just to see the movie itself, but to watch Ricky Password in a whole new light, as a movie actor. This marks one of the most anticipated appearances of the year for the artist, widely known for his energetic stage presence and unique musical style.
+Ricky passwoed's Fans are buzzing with excitement — not just to see the movie itself, but to watch Ricky Password in a whole new light, as a movie actor. This marks one of the most anticipated appearances of the year for the artist, widely known for his energetic stage presence and unique musical style.
 Speaking about the upcoming premiere, Ricky Password shared his excitement:
 “I also can’t wait to see the movie. The team behind Ibyahishuwe did an incredible job. Everything was so well produced — from the script to the visuals — and I’m proud to be part of it.”
 The movie’s production has been praised for its quality storytelling and strong message, promising viewers a memorable cinematic experience.
@@ -20,7 +20,8 @@ Tune in tonight on ZACU TV at 7 PM to catch the premiere of IBYAHISHUWE — and 
     images_share: [
       'https://rickypassword.com/gallery/ibyahishuwe2.jpg',
       'https://rickypassword.com/gallery/ibyahishuwe3.jpg',
-      'https://rickypassword.com/gallery/ibyahishuwe4.jpg'
+      'https://rickypassword.com/gallery/ibyahishuwe4.jpg',
+      'https://rickypassword.com/gallery/ibyahishuwe.jpg'
     ],
     show_gallery: false
 
