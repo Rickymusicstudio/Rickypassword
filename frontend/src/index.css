@@ -632,17 +632,3 @@ main:has(.hero:first-child) {
 .header { border-bottom: none !important; }
 .hero   { margin-top: 0 !important; }
 
-/* Slider layout */
-.news-slide{
-  display:grid;
-  grid-template-columns: minmax(320px,auto) 1fr; /* image shrinks to its real width */
-  align-items:center;
-}
-
-/* Image pane */
-.news-slide-img{
-  height: clamp(260px, 34vw, 420px);
-  background-size: contain !important;        /* no zoom */
-  background-repeat: no-repeat !important;
-  background-position: left center !important;/* flush to left */
-}
