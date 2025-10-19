@@ -54,10 +54,15 @@ export default function News() {
             <div className="news-hero-slider">
               <article className="news-slide">
                 <div
-                  className="news-slide-img"
-                  style={heroImg ? { backgroundImage: `url(${heroImg})` } : {}}
-                  aria-hidden="true"
-                />
+  className="news-slide-img"
+  style={{
+    backgroundImage: heroImg ? `url(${heroImg})` : 'none',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+  }}
+  aria-hidden="true"
+/>
                 <div className="news-slide-content">
                   <div className="news-slide-date">{fmtDate(current.date)}</div>
                   <h2 className="news-slide-title">

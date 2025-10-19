@@ -632,13 +632,8 @@ main:has(.hero:first-child) {
 .header { border-bottom: none !important; }
 .hero   { margin-top: 0 !important; }
 
-/* YouTube button */
-.btn-youtube{
-  background:#FF0000;
-  border:1px solid #FF0000;
-  color:#fff;
-}
-.btn-youtube:hover,
-.btn-youtube:focus{
-  filter: brightness(0.92);
+.news-slide-img {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
