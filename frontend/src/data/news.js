@@ -2,239 +2,31 @@
 export const NEWS = [
 
 {
-  slug: 'who-is-ricky-password',
+
+slug: 'who-is-ricky-password',
   title: 'WHO IS RICKYPASSWORD???',
   date: '2025-10-23',
   excerpt: 'Exclusive interview with Ricky Password — from the rock stages of Kigali to Paris and back home again.',
-  cover_url: 'https://rickypassword.com/molo-molo.jpg',
+  cover_url: 'https://rickypassword.com/gallery/molo-molo.jpg',
   content: `
-<div class="news-article" style="line-height:1.7;">
+The long-awaited moment has finally arrived! The IBYAHISHUWE Movie is set to premiere tonight at 7 PM exclusively on ZACU TV, as officially announced by the movie’s production team.
+Ricky passwoed's Fans are buzzing with excitement — not just to see the movie itself, but to watch Ricky Password in a whole new light, as a movie actor. This marks one of the most anticipated appearances of the year for the artist, widely known for his energetic stage presence and unique musical style.
+Speaking about the upcoming premiere, Ricky Password shared his excitement:
+“I also can’t wait to see the movie. The team behind Ibyahishuwe did an incredible job. Everything was so well produced — from the script to the visuals — and I’m proud to be part of it.”
+The movie’s production has been praised for its quality storytelling and strong message, promising viewers a memorable cinematic experience.
+Tune in tonight on ZACU TV at 7 PM to catch the premiere of IBYAHISHUWE — and don’t miss Ricky Password’s outstanding performance!
+    `.trim(),
+    // share-only gallery (hidden on normal news unless enabled)
+    images_share: [
+      'https://rickypassword.com/gallery/ibyahishuwe2.jpg',
+      'https://rickypassword.com/gallery/ibyahishuwe3.jpg',
+      'https://rickypassword.com/gallery/ibyahishuwe4.jpg',
+      'https://rickypassword.com/gallery/ibyahishuwe.jpg'
+    ],
+    show_gallery: false
 
-  <h2 style="margin:0 0 0.75rem 0; font-weight:800; font-size:1.75rem;">
-    <b>Who Is Ricky Password?</b>
-  </h2>
 
-  <p style="margin:0 0 1rem 0;">
-    An exclusive interview with Rwandan artist <b>Ricky Password (Eric Rwigema)</b> — a story that travels from the stages of
-    <b>Kigali to Paris</b>, from <b>local fame</b> to <b>rediscovery</b>.
-  </p>
-
-  <hr style="margin:1.25rem 0; border:0; border-top:1px solid #e6e6e6;" />
-
-  <h3 style="margin:1.75rem 0 0.5rem 0; font-size:1.35rem;">
-    <b>The Beginning</b>
-  </h3>
-
-  <p style="margin:0 0 1rem 0;">
-    <b>Ricky Password</b> began his musical path as a young Rwandan rockstar. His early songs — <b>Umukunzi Utanzi</b> and
-    <b>Ndababaye</b> — were rooted in rock before he gradually transitioned into <b>Afrobeats</b>, aligning with the pulse of
-    the Rwandan music scene.
-  </p>
-
-  <figure style="margin:0.75rem auto 1rem; text-align:center;">
-    <img
-      src="https://rickypassword.com/gallery/ricky-password-portrait.jpg"
-      alt="Ricky Password portrait"
-      loading="lazy"
-      style="width:100%; max-width:860px; height:auto; display:block; margin:0 auto; border-radius:12px;"
-    />
-    <figcaption style="font-style:italic; color:#666; margin-top:0.5rem;">Early press portrait from the rock era.</figcaption>
-  </figure>
-
-  <blockquote style="margin:0.75rem auto 1rem; padding:0.25rem 0 0.25rem 1rem; border-left:4px solid #ddd; color:#333;">
-    “I learned guitar from my cousin <b>David</b> — he’s really the booster. Ever since he gave me a guitar, I started writing
-    lyrics and composing melodies.”
-  </blockquote>
-
-  <p style="margin:0 0 1rem 0;">
-    His first song was a gospel track titled <b>Mpumura Amaso</b> — “like almost everyone else,” he laughs. Soon after, he met
-    producer <b>Jimy</b>, who recorded <b>Umukunzi Utanzi</b>, marking his official entry into Rwanda’s contemporary music scene.
-  </p>
-
-  <hr style="margin:1.25rem 0; border:0; border-top:1px solid #e6e6e6;" />
-
-  <h3 style="margin:1.75rem 0 0.5rem 0; font-size:1.35rem;">
-    <b>Finding His Sound</b>
-  </h3>
-
-  <p style="margin:0 0 1rem 0;">
-    The success of <b>Umukunzi Utanzi</b> inspired Ricky to keep refining his sound. He followed it up with <b>Ndababaye</b> and
-    <b>Twibyire</b>, and later teamed up with rap icon <b>Bull Dog</b> on <b>Wikozeho</b>.
-  </p>
-
-  <figure style="margin:0.75rem auto 1rem; text-align:center;">
-    <img
-      src="https://rickypassword.com/gallery/molo-molo.jpg"
-      alt="Ricky performing Molo Molo"
-      loading="lazy"
-      style="width:100%; max-width:860px; height:auto; display:block; margin:0 auto; border-radius:12px;"
-    />
-    <figcaption style="font-style:italic; color:#666; margin-top:0.5rem;">Performing around the “Molo Molo” era.</figcaption>
-  </figure>
-
-  <p style="margin:0 0 1rem 0;">
-    Then came his introduction to producer <b>Sebsz</b>, who ushered in Ricky’s <b>Afrobeat</b> era. Together, they produced
-    <b>Furahi Day</b> and <b>Molo Molo</b> — the latter a certified hit across Kigali.
-  </p>
-
-  <blockquote style="margin:0.75rem auto 1rem; padding:0.25rem 0 0.25rem 1rem; border-left:4px solid #ddd; color:#333;">
-    “<b>Molo Molo</b> gave me a real taste of fame — I used to hear it everywhere, even on KFM Radio. That’s when I realized
-    people were really connecting to my music.”
-  </blockquote>
-
-  <hr style="margin:1.25rem 0; border:0; border-top:1px solid #e6e6e6;" />
-
-  <h3 style="margin:1.75rem 0 0.5rem 0; font-size:1.35rem;">
-    <b>Breakthrough and Collaborations</b>
-  </h3>
-
-  <p style="margin:0 0 1rem 0;">
-    With guidance from his cousin <b>Kevin (Vino)</b>, Ricky connected with major producers like <b>Poster P</b>, releasing
-    <b>Dance With Me</b>. In <b>2013</b>, he landed one of his biggest collaborations — <b>Madiva</b>, featuring <b>Big Fizzo</b>
-    from Burundi, also produced by Poster P.
-  </p>
-
-  <p style="margin:0 0 1rem 0;">
-    That same year, Ricky performed on major stages like the <b>Valu Valu Concert</b> by Chameleone, <b>Kigali Up Festival</b>,
-    and <b>Unplugged Party</b> by KFM Radio — moments that solidified his reputation.
-  </p>
-
-  <hr style="margin:1.25rem 0; border:0; border-top:1px solid #e6e6e6;" />
-
-  <h3 style="margin:1.75rem 0 0.5rem 0; font-size:1.35rem;">
-    <b>Visa Pour La Création: The Paris Chapter (2014)</b>
-  </h3>
-
-  <p style="margin:0 0 1rem 0;">
-    At the end of 2013, event producer <b>Judo</b> encouraged Ricky to apply for the <b>Institut Français “Visa pour la Création”</b>
-    program. He was selected — becoming one of Rwanda’s rare laureates.
-  </p>
-
-  <figure style="margin:0.75rem auto 1rem; text-align:center;">
-    <img
-      src="https://rickypassword.com/gallery/ricky-paris.jpg"
-      alt="Ricky in Paris"
-      loading="lazy"
-      style="width:100%; max-width:860px; height:auto; display:block; margin:0 auto; border-radius:12px;"
-    />
-    <figcaption style="font-style:italic; color:#666; margin-top:0.5rem;">Residency moments in Paris (Cité Internationale des Arts).</figcaption>
-  </figure>
-
-  <blockquote style="margin:0.75rem auto 1rem; padding:0.25rem 0 0.25rem 1rem; border-left:4px solid #ddd; color:#333;">
-    “Wow, what a year! Nobody believed me when I said I was going to Paris. I was in positive shock — a boy from Kigali streets, now an artist in Paris.”
-  </blockquote>
-
-  <p style="margin:0 0 1rem 0;">
-    In <b>April 2014</b>, Ricky spent four months at the <b>Cité Internationale des Arts de Paris</b>, performing at showcases, doing
-    interviews — including one with <b>RFI</b> — and representing Rwanda at the <i>Only French Music Festival</i>.
-  </p>
-
-  <hr style="margin:1.25rem 0; border:0; border-top:1px solid #e6e6e6;" />
-
-  <h3 style="margin:1.75rem 0 0.5rem 0; font-size:1.35rem;">
-    <b>A Pause and Reflection</b>
-  </h3>
-
-  <p style="margin:0 0 1rem 0;">After returning from Paris, things slowed down.</p>
-
-  <blockquote style="margin:0.75rem auto 1rem; padding:0.25rem 0 0.25rem 1rem; border-left:4px solid #ddd; color:#333;">
-    “Everything went down for real. My return wasn’t successful, and my inspiration faded. Only I know the reasons.”
-  </blockquote>
-
-  <p style="margin:0 0 1rem 0;">
-    During that period, he focused on finishing university and recorded <b>Ndahita Nigendera</b> with <b>Angel Mutoni</b>, a soulful
-    collaboration that still stands out among his catalog.
-  </p>
-
-  <hr style="margin:1.25rem 0; border:0; border-top:1px solid #e6e6e6;" />
-
-  <h3 style="margin:1.75rem 0 0.5rem 0; font-size:1.35rem;">
-    <b>The Musanze Chapter</b>
-  </h3>
-
-  <p style="margin:0 0 1rem 0;">
-    In <b>2017</b>, Ricky moved to <b>Musanze</b> for a banking job — a quieter life far from the capital.
-  </p>
-
-  <figure style="margin:0.75rem auto 1rem; text-align:center;">
-    <img
-      src="https://rickypassword.com/gallery/studio_session_1.jpg"
-      alt="Ricky performing in Musanze"
-      loading="lazy"
-      style="width:100%; max-width:860px; height:auto; display:block; margin:0 auto; border-radius:12px;"
-    />
-    <figcaption style="font-style:italic; color:#666; margin-top:0.5rem;">Bonfire-style live sessions; intimate acoustic vibes.</figcaption>
-  </figure>
-
-  <blockquote style="margin:0.75rem auto 1rem; padding:0.25rem 0 0.25rem 1rem; border-left:4px solid #ddd; color:#333;">
-    “Sometimes it’s necessary to start over. But music followed me everywhere.”
-  </blockquote>
-
-  <p style="margin:0 0 1rem 0;">
-    Working as a teller, people would recognize him. He began hosting <b>Saturday live sessions</b> at hotels, including <b>Migano</b>,
-    performing acoustic sets around bonfires. There, he formed close bonds with a group of friends he fondly calls <b>Abahungu</b> —
-    “They became family to me.”
-  </p>
-
-  <hr style="margin:1.25rem 0; border:0; border-top:1px solid #e6e6e6;" />
-
-  <h3 style="margin:1.75rem 0 0.5rem 0; font-size:1.35rem;">
-    <b>Return to Kigali and a Comeback Attempt</b>
-  </h3>
-
-  <p style="margin:0 0 1rem 0;">
-    In <b>2019</b>, Ricky returned to <b>Kigali</b> for a position at the <b>Bank of Kigali</b>. By <b>2022</b>, he tried returning
-    to music — and found a spark again through a collaboration with <b>Gabiro Guitar</b>.
-  </p>
-
-  <p style="margin:0 0 1rem 0;">
-    Their single <b>“Pretend”</b> became a success, earning <b>108K+ views on YouTube</b> and reminding fans of Ricky’s smooth vocals
-    and emotional delivery.
-  </p>
-
-  <hr style="margin:1.25rem 0; border:0; border-top:1px solid #e6e6e6;" />
-
-  <h3 style="margin:1.75rem 0 0.5rem 0; font-size:1.35rem;">
-    <b>Building a Studio — and a Setback</b>
-  </h3>
-
-  <p style="margin:0 0 1rem 0;">
-    In <b>2024</b>, Ricky opened <b>Ricky Music Studio</b>, hiring <b>Piano the Groove Man</b> as producer. The project showed promise —
-    until Piano relocated to Germany.
-  </p>
-
-  <blockquote style="margin:0.75rem auto 1rem; padding:0.25rem 0 0.25rem 1rem; border-left:4px solid #ddd; color:#333;">
-    “The studio wasn’t making income, and I wasn’t fully focused, so I decided to shut it down until I find the right producer. Still, it taught me a lot.”
-  </blockquote>
-
-  <hr style="margin:1.25rem 0; border:0; border-top:1px solid #e6e6e6;" />
-
-  <h3 style="margin:1.75rem 0 0.5rem 0; font-size:1.35rem;">
-    <b>So, Ricky — What Now?</b>
-  </h3>
-
-  <blockquote style="margin:0.75rem auto 1rem; padding:0.25rem 0 0.25rem 1rem; border-left:4px solid #ddd; color:#333;">
-    “It’s been a long journey. Right now, I’m working on new music, just for the love of it. I can’t say I’m fully back, but maybe this next one will hit — maybe it’ll put me back on the spotlight like <b>Molo Molo</b> (haha)!”
-  </blockquote>
-
-  <p style="margin:0 0 1rem 0;">When asked how he defines his career, he smiles:</p>
-
-  <blockquote style="margin:0.5rem auto 1rem; padding:0.25rem 0 0.25rem 1rem; border-left:4px solid #ddd; color:#333;">
-    “I don’t know. Some people know and love my songs — and that’s what matters most. I’ll always want to make another one.”
-  </blockquote>
-
-  <p style="margin:0 0 0.5rem 0;"><b>“Music will always be part of me — even when I try to stop, it finds me again.”</b><br/>
-  — <i>Ricky Password</i></p>
-
-</div>
-  `.trim(),
-  images_share: [
-    'https://rickypassword.com/gallery/ricky-password-portrait.jpg',
-    'https://rickypassword.com/gallery/molo-molo.jpg',
-    'https://rickypassword.com/gallery/ricky-paris.jpg'
-  ],
-  show_gallery: true
-}
+},
 
 
 {
