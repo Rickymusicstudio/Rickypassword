@@ -8,85 +8,132 @@ export const NEWS = [
   excerpt: 'Exclusive interview with Ricky Password — from the rock stages of Kigali to Paris and back home again.',
   cover_url: 'https://rickypassword.com/molo-molo.jpg',
   content: `
-# 🎙️ **Who Is Ricky Password ????**
+<h2>🎙️ <b>Who Is Ricky Password?</b></h2>
 
-An exclusive interview with Rwandan artist **Ricky Password (Eric Rwigema)** — a story that travels from the stages of **Kigali to Paris**, from **local fame** to **rediscovery**.
+<p>An exclusive interview with Rwandan artist <b>Ricky Password (Eric Rwigema)</b> — a story that travels from the stages of <b>Kigali to Paris</b>, from <b>local fame</b> to <b>rediscovery</b>.</p>
 
-## 🎸 **The Beginning**
+<hr/>
 
-**Ricky Password** began his musical path as a *young Rwandan rockstar*.  
-His early songs — **Umukunzi Utanzi** and **Ndababaye** — were rooted in rock before he gradually transitioned into **Afrobeats**, aligning with the pulse of the Rwandan music scene.
-![Early days — rock era](https://rickypassword.com/gallery/ricky-password-portrait.jpg)  
-*Early press portrait from the rock era.*
-> “I learned guitar from my cousin **David** — he’s really the booster. Ever since he gave me a guitar, I started writing lyrics and composing melodies.”
-His first song was a gospel track titled **Mpumura Amaso** — “like almost everyone else,” he laughs.  
-Soon after, he met producer **Jimy**, who recorded **Umukunzi Utanzi**, marking his official entry into Rwanda’s contemporary music scene.
+<h3>🎸 <b>The Beginning</b></h3>
 
-## 🎶 **Finding His Sound**
+<p><b>Ricky Password</b> began his musical path as a young Rwandan rockstar. His early songs — <b>Umukunzi Utanzi</b> and <b>Ndababaye</b> — were rooted in rock before he gradually transitioned into <b>Afrobeats</b>, aligning with the pulse of the Rwandan music scene.</p>
 
-The success of **Umukunzi Utanzi** inspired Ricky to keep refining his sound.  
-He followed it up with **Ndababaye** and **Twibyire**, and later teamed up with rap icon **Bull Dog** on *Wikozeho*.
-![Live performance — “Molo Molo” era](https://rickypassword.com/gallery/molo-molo.jpg)  
-*Performing around the “Molo Molo” era.*
+<figure>
+  <img src="https://rickypassword.com/gallery/ricky-password-portrait.jpg" alt="Ricky Password portrait" style="max-width:100%;border-radius:12px;margin:12px 0;" />
+  <figcaption><i>Early press portrait from the rock era</i></figcaption>
+</figure>
 
-Then came his introduction to producer **Sebsz**, who ushered in Ricky’s **Afrobeat** era.  
-Together, they produced **Furahi Day** and **Molo Molo** — the latter a certified hit across Kigali.
-> “**Molo Molo** gave me a real taste of fame — I used to hear it everywhere, even on KFM Radio. That’s when I realized people were really connecting to my music.”
+<blockquote>
+  “I learned guitar from my cousin <b>David</b> — he’s really the booster. Ever since he gave me a guitar, I started writing lyrics and composing melodies.”
+</blockquote>
 
-## 🌟 **Breakthrough and Collaborations**
+<p>His first song was a gospel track titled <b>Mpumura Amaso</b> — “like almost everyone else,” he laughs. Soon after, he met producer <b>Jimy</b>, who recorded <b>Umukunzi Utanzi</b>, marking his official entry into Rwanda’s contemporary music scene.</p>
 
-With guidance from his cousin **Kevin (Vino)**, Ricky connected with major producers like **Poster P**, releasing **Dance With Me**.  
-In **2013**, he landed one of his biggest collaborations — **Madiva**, featuring **Big Fizzo** from Burundi, also produced by Poster P.That same year, Ricky performed on major stages:  
-**Valu Valu Concert** by Chameleone, **Kigali Up Festival**, and **Unplugged Party** by **KFM Radio** — moments that solidified his reputation.
+<hr/>
 
-## ✈️ **Visa Pour La Création: The Paris Chapter (2014)**
+<h3>🎵 <b>Finding His Sound</b></h3>
 
-At the end of 2013, event producer **Judo** encouraged Ricky to apply for the **Institut Français “Visa pour la Création”** program.  
-He was selected — becoming one of Rwanda’s rare laureates.
+<p>The success of <b>Umukunzi Utanzi</b> inspired Ricky to keep refining his sound. He followed it up with <b>Ndababaye</b> and <b>Twibyire</b>, and later teamed up with rap icon <b>Bull Dog</b> on <b>Wikozeho</b>.</p>
 
-![Paris residency — Cité Internationale des Arts](https://rickypassword.com/gallery/ricky-paris.jpg)  
-*Residency moments in Paris (Cité Internationale des Arts).*
+<figure>
+  <img src="https://rickypassword.com/gallery/molo-molo.jpg" alt="Ricky performing Molo Molo" style="max-width:100%;border-radius:12px;margin:12px 0;" />
+  <figcaption><i>Performing around the “Molo Molo” era.</i></figcaption>
+</figure>
 
-> “Wow, what a year! Nobody believed me when I said I was going to Paris. I was in positive shock — a boy from Kigali streets, now an artist in Paris.”
-In **April 2014**, Ricky spent **four months at the Cité Internationale des Arts de Paris**, performing at showcases, doing interviews — including one with **RFI** — and representing Rwanda at the *Only French Music Festival*.
+<p>Then came his introduction to producer <b>Sebsz</b>, who ushered in Ricky’s <b>Afrobeat</b> era. Together, they produced <b>Furahi Day</b> and <b>Molo Molo</b> — the latter a certified hit across Kigali.</p>
 
-## 💭 **A Pause and Reflection**
+<blockquote>
+  “<b>Molo Molo</b> gave me a real taste of fame — I used to hear it everywhere, even on KFM Radio. That’s when I realized people were really connecting to my music.”
+</blockquote>
 
-After returning from Paris, things slowed down.> “Everything went down for real. My return wasn’t successful, and my inspiration faded. Only I know the reasons.”
-During that period, he focused on finishing university and recorded **Ndahita Nigendera** with **Angel Mutoni**, a soulful collaboration that still stands out among his catalog.
+<hr/>
 
-## 🏞️ **The Musanze Chapter**
+<h3>🌟 <b>Breakthrough and Collaborations</b></h3>
 
-In **2017**, Ricky moved to **Musanze** for a banking job — a quieter life far from the capital.
+<p>With guidance from his cousin <b>Kevin (Vino)</b>, Ricky connected with major producers like <b>Poster P</b>, releasing <b>Dance With Me</b>. In <b>2013</b>, he landed one of his biggest collaborations — <b>Madiva</b>, featuring <b>Big Fizzo</b> from Burundi, also produced by Poster P.</p>
 
-![Musanze — acoustic nights](https://rickypassword.com/gallery/studio_session_1.jpg)  
-*Bonfire-style live sessions; intimate acoustic vibes.*
+<p>That same year, Ricky performed on major stages like the <b>Valu Valu Concert</b> by Chameleone, <b>Kigali Up Festival</b>, and <b>Unplugged Party</b> by KFM Radio — moments that solidified his reputation.</p>
 
-> “Sometimes it’s necessary to start over. But music followed me everywhere.”
+<hr/>
 
-Working as a teller, people would recognize him. He began hosting **Saturday live sessions** at hotels, including **Migano**, performing acoustic sets around bonfires.  
-There, he formed close bonds with a group of friends he fondly calls **Abahungu** — “They became family to me.”
+<h3>✈️ <b>Visa Pour La Création: The Paris Chapter (2014)</b></h3>
 
-## 🏙️ **Return to Kigali and a Comeback Attempt**
+<p>At the end of 2013, event producer <b>Judo</b> encouraged Ricky to apply for the <b>Institut Français “Visa pour la Création”</b> program. He was selected — becoming one of Rwanda’s rare laureates.</p>
 
-In **2019**, Ricky returned to **Kigali** for a position at the **Bank of Kigali**.  
-By **2022**, he tried returning to music — and found a spark again through a collaboration with **Gabiro Guitar**.
-Their single **“Pretend”** became a success, earning **108K+ views on YouTube** and reminding fans of Ricky’s smooth vocals and emotional delivery.
+<figure>
+  <img src="https://rickypassword.com/gallery/ricky-paris.jpg" alt="Ricky in Paris" style="max-width:100%;border-radius:12px;margin:12px 0;" />
+  <figcaption><i>Residency moments in Paris (Cité Internationale des Arts)</i></figcaption>
+</figure>
 
-## 🎧 **Building a Studio — and a Setback**
+<blockquote>
+  “Wow, what a year! Nobody believed me when I said I was going to Paris. I was in positive shock — a boy from Kigali streets, now an artist in Paris.”
+</blockquote>
 
-In **2024**, Ricky opened **Ricky Music Studio**, hiring **Piano the Groove Man** as producer.  
-The project showed promise — until Piano relocated to Germany.> “The studio wasn’t making income, and I wasn’t fully focused, so I decided to shut it down until I find the right producer. Still, it taught me a lot.”
+<p>In <b>April 2014</b>, Ricky spent four months at the <b>Cité Internationale des Arts de Paris</b>, performing at showcases, doing interviews — including one with <b>RFI</b> — and representing Rwanda at the <i>Only French Music Festival</i>.</p>
 
-## 🔥 **So, Ricky — What Now?**
+<hr/>
 
-> “It’s been a long journey. Right now, I’m working on new music, just for the love of it. I can’t say I’m fully back, but maybe this next one will hit — maybe it’ll put me back on the spotlight like *Molo Molo* (haha)!”
+<h3>💭 <b>A Pause and Reflection</b></h3>
 
-When asked how he defines his career, he smiles:> “I don’t know. Some people know and love my songs — and that’s what matters most. I’ll always want to make another one.”
+<p>After returning from Paris, things slowed down.</p>
 
-> **“Music will always be part of me — even when I try to stop, it finds me again.”**  
+<blockquote>
+  “Everything went down for real. My return wasn’t successful, and my inspiration faded. Only I know the reasons.”
+</blockquote>
 
-> — *Ricky Password*
+<p>During that period, he focused on finishing university and recorded <b>Ndahita Nigendera</b> with <b>Angel Mutoni</b>, a soulful collaboration that still stands out among his catalog.</p>
+
+<hr/>
+
+<h3>🏞️ <b>The Musanze Chapter</b></h3>
+
+<p>In <b>2017</b>, Ricky moved to <b>Musanze</b> for a banking job — a quieter life far from the capital.</p>
+
+<figure>
+  <img src="https://rickypassword.com/gallery/studio_session_1.jpg" alt="Ricky performing in Musanze" style="max-width:100%;border-radius:12px;margin:12px 0;" />
+  <figcaption><i>Bonfire-style live sessions; intimate acoustic vibes.</i></figcaption>
+</figure>
+
+<blockquote>
+  “Sometimes it’s necessary to start over. But music followed me everywhere.”
+</blockquote>
+
+<p>Working as a teller, people would recognize him. He began hosting <b>Saturday live sessions</b> at hotels, including <b>Migano</b>, performing acoustic sets around bonfires. There, he formed close bonds with a group of friends he fondly calls <b>Abahungu</b> — “They became family to me.”</p>
+
+<hr/>
+
+<h3>🏙️ <b>Return to Kigali and a Comeback Attempt</b></h3>
+
+<p>In <b>2019</b>, Ricky returned to <b>Kigali</b> for a position at the <b>Bank of Kigali</b>. By <b>2022</b>, he tried returning to music — and found a spark again through a collaboration with <b>Gabiro Guitar</b>.</p>
+
+<p>Their single <b>“Pretend”</b> became a success, earning <b>108K+ views on YouTube</b> and reminding fans of Ricky’s smooth vocals and emotional delivery.</p>
+
+<hr/>
+
+<h3>🎧 <b>Building a Studio — and a Setback</b></h3>
+
+<p>In <b>2024</b>, Ricky opened <b>Ricky Music Studio</b>, hiring <b>Piano the Groove Man</b> as producer. The project showed promise — until Piano relocated to Germany.</p>
+
+<blockquote>
+  “The studio wasn’t making income, and I wasn’t fully focused, so I decided to shut it down until I find the right producer. Still, it taught me a lot.”
+</blockquote>
+
+<hr/>
+
+<h3>🔥 <b>So, Ricky — What Now?</b></h3>
+
+<blockquote>
+  “It’s been a long journey. Right now, I’m working on new music, just for the love of it. I can’t say I’m fully back, but maybe this next one will hit — maybe it’ll put me back on the spotlight like <b>Molo Molo</b> (haha)!”
+</blockquote>
+
+<p>When asked how he defines his career, he smiles:</p>
+
+<blockquote>
+  “I don’t know. Some people know and love my songs — and that’s what matters most. I’ll always want to make another one.”
+</blockquote>
+
+<p><b>“Music will always be part of me — even when I try to stop, it finds me again.”</b><br/>
+— <i>Ricky Password</i></p>
   `.trim(),
   images_share: [
     'https://rickypassword.com/gallery/ricky-password-portrait.jpg',
