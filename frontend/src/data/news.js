@@ -6,7 +6,7 @@ export const NEWS = [
     title: 'Ricky Password to Serenade Lovers in an Acoustic Night at Tiamo Lounge',
     date: '2026-02-14',
     excerpt: 'Ricky Password to perform live acoustic love songs this Valentine’s Day at Tiamo Lounge from 19:00 to 21:00.',
-    cover_url: 'https://rickypassword.com/gallery/image11.jpg',
+    cover_url: 'https://rickypassword.com/gallery/love.jpeg',
     content: `
 Love will sound sweeter than ever this Valentine’s Day.
 
