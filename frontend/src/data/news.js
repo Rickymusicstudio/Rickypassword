@@ -22,7 +22,7 @@ Make it a date. Bring someone special.
 This Valentine’s Day, experience love — unplugged — with Ricky Password at Tiamo Lounge.
     `.trim(),
     images_share: [
-      'https://rickypassword.com/gallery/love.jpg'
+      'https://rickypassword.com/gallery/love.jpeg'
     ],
     show_gallery: false
 },
