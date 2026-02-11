@@ -632,3 +632,39 @@ main:has(.hero:first-child) {
 .header { border-bottom: none !important; }
 .hero   { margin-top: 0 !important; }
 
+/* =========================
+   News Article Images (clickable + styled)
+   ========================= */
+.news-article figure {
+  margin: 24px auto;
+  text-align: center;
+  max-width: 860px;
+}
+
+.news-article figure img {
+  width: 100%;
+  max-width: 860px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-article figure img:hover {
+  transform: scale(1.015);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.news-article figcaption {
+  font-style: italic;
+  color: #888;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* optional spacing fix between blocks */
+.news-article p + figure,
+.news-article figure + p {
+  margin-top: 16px;
+}

@@ -1,10 +1,34 @@
 // src/data/news.js
 export const NEWS = [
 
+{
+    slug: 'ricky-password-valentines-acoustic-night-tiamo-lounge',
+    title: 'Ricky Password to Serenade Lovers in an Acoustic Night at Tiamo Lounge',
+    date: '2026-02-14',
+    excerpt: 'Ricky Password to perform live acoustic love songs this Valentine’s Day at Tiamo Lounge from 19:00 to 21:00.',
+    cover_url: 'https://rickypassword.com/gallery/image11.jpg',
+    content: `
+Love will sound sweeter than ever this Valentine’s Day.
+
+On Saturday, February 14th, from 19:00 to 21:00, Ricky Password invites all lovers to a special Acoustic Night at Tiamo Lounge — an intimate live experience dedicated to romance.
+
+With nothing but his voice and his guitar, Ricky Password will deliver a soulful unplugged performance designed especially for couples and lovers. This unique evening promises soft melodies, heartfelt lyrics, and a warm atmosphere that transforms every note into a love story.
+
+Guests can expect a beautiful selection of timeless love songs, romantic classics, and many of Ricky Password’s own beloved tracks — all performed live in acoustic style. Stripped down, raw, and authentic, this performance will create the perfect soundtrack for your Valentine’s celebration.
+
+Imagine candle-lit tables, smooth acoustic rhythms, and the gentle sound of guitar strings filling the room as love stories unfold around you.
+
+Make it a date. Bring someone special.
+This Valentine’s Day, experience love — unplugged — with Ricky Password at Tiamo Lounge.
+    `.trim(),
+    images_share: [
+      'https://rickypassword.com/gallery/love.jpg'
+    ],
+    show_gallery: false
+},
 
 {
-
-slug: 'ibyahishuwe-movie-premiere-7pm-zacu-tv',
+    slug: 'ibyahishuwe-movie-premiere-7pm-zacu-tv',
     title: 'IBYAHISHUWE MOVIE PREMIERE TONIGHT AT 7PM ON ZACU TV',
     date: '2025-10-19',
     excerpt: 'IBYAHISHUWE MOVIE PREMIERE TONIGHT AT 7PM ON ZACU TV',
@@ -12,12 +36,11 @@ slug: 'ibyahishuwe-movie-premiere-7pm-zacu-tv',
     content: `
 The long-awaited moment has finally arrived! The IBYAHISHUWE Movie is set to premiere tonight at 7 PM exclusively on ZACU TV, as officially announced by the movie’s production team.
 Ricky passwoed's Fans are buzzing with excitement — not just to see the movie itself, but to watch Ricky Password in a whole new light, as a movie actor. This marks one of the most anticipated appearances of the year for the artist, widely known for his energetic stage presence and unique musical style.
-Speaking about the upcoming premiere, Ricky Password shared his excitement:
+Speaking about the upcoming premiere, Ricky Password shared:
 “I also can’t wait to see the movie. The team behind Ibyahishuwe did an incredible job. Everything was so well produced — from the script to the visuals — and I’m proud to be part of it.”
 The movie’s production has been praised for its quality storytelling and strong message, promising viewers a memorable cinematic experience.
 Tune in tonight on ZACU TV at 7 PM to catch the premiere of IBYAHISHUWE — and don’t miss Ricky Password’s outstanding performance!
     `.trim(),
-    // share-only gallery (hidden on normal news unless enabled)
     images_share: [
       'https://rickypassword.com/gallery/ibyahishuwe2.jpg',
       'https://rickypassword.com/gallery/ibyahishuwe3.jpg',
@@ -25,10 +48,7 @@ Tune in tonight on ZACU TV at 7 PM to catch the premiere of IBYAHISHUWE — and 
       'https://rickypassword.com/gallery/ibyahishuwe.jpg'
     ],
     show_gallery: false
-
-
 },
-
 
   {
     slug: 'ricky-password-back-in-studio',
@@ -45,7 +65,6 @@ When asked about the release date, Ricky revealed:
 “The date will be communicated soon.”
 Fans are eagerly waiting, and with such a strong collaboration in the works, expectations are high for Ricky Password’s much-anticipated comeback track.
     `.trim(),
-    // share-only gallery (hidden on normal news unless enabled)
     images_share: [
       'https://rickypassword.com/gallery/studio_session_1.jpg',
       'https://rickypassword.com/gallery/studio_session_2.jpg',
