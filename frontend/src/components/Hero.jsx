@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 export default function Hero({
   title = 'RICKY PASSWORD',
   subtitle = 'Latest Release',
-  trackTitle = 'STAR',
+  trackTitle = 'IMPITAGIHE',
 }) {
   return (
     <section className="hero" style={{ backgroundImage: `url(${heroImg})` }}>
