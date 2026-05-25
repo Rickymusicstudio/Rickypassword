@@ -6,7 +6,7 @@ export const NEWS = [
     title: 'Ricky Password yasohoye indirimbo nshya “IMPITAGIHE”',
     date: '2026-05-25',
     excerpt: 'Umuhanzi Ricky Password yasohoye indirimbo nshya yise IMPITAGIHE iri mu njyana ya Kompa Zouk.',
-    cover_url: 'https://rickypassword.com/gallery/impitagihe.jpg',
+    cover_url: 'https://rickypassword.com/gallery/impitagihe.png',
     content: `
 Umuhanzi nyarwanda Ricky Password yasohoye indirimbo nshya yise “IMPITAGIHE”, indirimbo iri mu njyana ya Kompa Zouk.
 
@@ -33,7 +33,7 @@ Nubwo amashusho yayo ataremezwa neza, abafana be bamaze kwakira neza iyi ndirimb
     title: 'Ricky Password to Serenade Lovers in an Acoustic Night at Tiamo Lounge',
     date: '2026-02-14',
     excerpt: 'Ricky Password to perform live acoustic love songs this Valentine’s Day at Tiamo Lounge from 19:00 to 21:00.',
-    cover_url: 'https://rickypassword.com/gallery/imotagihe.png',
+    cover_url: 'https://rickypassword.com/gallery/imotagihe.jpeg',
     content: `
 Love will sound sweeter than ever this Valentine’s Day.
 
