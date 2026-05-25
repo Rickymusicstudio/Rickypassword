@@ -3,7 +3,7 @@ export const songs = [
 {
     sku: 'IMPITAGIHE-MP3',
     title: 'IMPITAGIHE',
-    cover_url: '/covers/impitagihe.PNG', // use the real extension (.jpg/.png)
+    cover_url: '/covers/impitagihe.png', // use the real extension (.jpg/.png)
     // you can keep spaces; Music.jsx encodes them
     preview_url: '/IMPITAGIHE.mp3',
     media_path:  '/audio/IMPITAGIHE.mp3',
