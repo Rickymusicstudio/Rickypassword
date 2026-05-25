@@ -20,7 +20,7 @@ Twamubajije niba ateganya gukora amashusho yayo, adusubiza ko bishoboka ariko ub
 
 Nubwo amashusho yayo ataremezwa neza, abafana be bamaze kwakira neza iyi ndirimbo nshya bavuga ko yumvikanamo uburyohe bwa Kompa Zouk n’amarangamutima menshi.
 
-“IMPITAGIHE” ni imwe mu ndirimbo Ricky Password avuga ko zifite igice kinini cy’ubuzima bwe bwite n’ibyamubayeho mu rukundo.
+
     `.trim(),
     images_share: [
       'https://rickypassword.com/gallery/impitagihe.png'
