@@ -1,6 +1,41 @@
 // src/data/news.js
 export const NEWS = [
 
+    {
+    slug: 'ricky-password-reveals-nguye-aha',
+    title: 'Ricky Password Reveals "Nguye Aha" as the Second Song from His Upcoming EP',
+    date: '2026-06-02',
+    excerpt: 'Ricky Password has revealed "Nguye Aha" as the second song from his upcoming EP and says fans are not ready for what is coming.',
+    cover_url: 'https://rickypassword.com/gallery/nguye-aha.png',
+    content: `
+Rwandan artist Ricky Password has officially revealed the title of the second song from his upcoming EP, and fans are already talking about it.
+
+The song, titled "Nguye Aha", is set to be the next release from the highly anticipated project. Alongside the announcement, Ricky Password also unveiled the official cover artwork, giving fans a first glimpse into the mood and style of the upcoming track.
+
+Speaking about the release, Ricky Password hinted that listeners should expect something special.
+
+"This song will be out very soon, and my fans are not ready for this one. This is an international banger," said Ricky Password.
+
+The artist recently released "Impitagihe", the first song from the EP, which received positive feedback from listeners both in Rwanda and abroad.
+
+When asked about the reception of the song, Ricky Password expressed his gratitude to fans.
+
+"The feedback was so interesting. People connected with the song in ways I didn't expect, and that motivates me even more."
+
+Ricky also revealed that he is considering producing a music video for "Nguye Aha", something that could further boost the visibility of the entire EP.
+
+"I'm planning a video clip for this coming one, and I'm sure it will also help promote Impitagihe because I really loved that song."
+
+With excitement building around the project, fans are eagerly waiting for the release date of "Nguye Aha". If Ricky Password's promises are anything to go by, the track could become one of the standout songs of the year and mark another important step in his musical journey.
+
+More details, including the official release date, are expected to be announced soon.
+    `.trim(),
+    images_share: [
+      'https://rickypassword.com/gallery/nguye-aha.png'
+    ],
+    show_gallery: false
+},
+
 {
     slug: 'ricky-password-impitagihe',
     title: 'Ricky Password yasohoye indirimbo nshya “IMPITAGIHE”',
