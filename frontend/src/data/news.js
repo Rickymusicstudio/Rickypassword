@@ -1,6 +1,39 @@
 // src/data/news.js
 export const NEWS = [
 
+{
+slug: 'ricky-password-releases-nguye-aha',
+title: 'Ricky Password Releases New Song "Nguye Aha"',
+date: '2026-06-10',
+excerpt: 'Rwandan artist Ricky Password has officially released "Nguye Aha", the second song from his upcoming six-track EP.',
+cover_url: 'https://rickypassword.com/gallery/nguye-aha2.png',
+content: `
+Rwandan artist Ricky Password has officially released his new song, "Nguye Aha", the second track from his upcoming EP.
+
+The release comes after the singer recently teased fans about the song, creating excitement among listeners eager to hear the latest addition to the project.
+
+Speaking about the EP, Ricky Password revealed that it will consist of six songs in total. He also confirmed that work has already begun on the third track.
+
+"I am currently working on the third song. The EP will have six songs, and after it is complete, I want the fans to help me decide which songs deserve music videos," said Ricky Password.
+
+The artist recently released "Impitagihe", the first song from the EP, which received positive feedback from fans both in Rwanda and abroad.
+
+Rather than making the decision alone, Ricky Password plans to involve his supporters by allowing them to choose which songs from the EP should receive official music videos once the project is complete.
+
+With "Nguye Aha" now available, fans can look forward to more releases in the coming months as Ricky Password continues work on the remaining songs of the highly anticipated EP.
+
+More details about the upcoming tracks and fan voting process are expected to be announced soon.
+`.trim(),
+images_share: [
+'https://rickypassword.com/gallery/nguye-aha.png',
+'https://rickypassword.com/gallery/nguye-aha2.png',
+'https://rickypassword.com/gallery/nguye-aha3.png'
+],
+show_gallery: false
+},
+
+
+
     {
     slug: 'ricky-password-reveals-nguye-aha',
     title: 'Ricky Password Reveals "Nguye Aha" as the Second Song from His Upcoming EP',
