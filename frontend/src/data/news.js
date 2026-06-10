@@ -6,7 +6,7 @@ slug: 'ricky-password-releases-nguye-aha',
 title: 'Ricky Password Releases New Song "Nguye Aha"',
 date: '2026-06-10',
 excerpt: 'Rwandan artist Ricky Password has officially released "Nguye Aha", the second song from his upcoming six-track EP.',
-cover_url: 'https://rickypassword.com/gallery/nguye-aha2.png',
+cover_url: 'https://rickypassword.com/gallery/nguye-aha2.jpeg',
 content: `
 Rwandan artist Ricky Password has officially released his new song, "Nguye Aha", the second track from his upcoming EP.
 
@@ -26,8 +26,8 @@ More details about the upcoming tracks and fan voting process are expected to be
 `.trim(),
 images_share: [
 'https://rickypassword.com/gallery/nguye-aha.png',
-'https://rickypassword.com/gallery/nguye-aha2.png',
-'https://rickypassword.com/gallery/nguye-aha3.png'
+'https://rickypassword.com/gallery/nguye-aha2.jpeg',
+'https://rickypassword.com/gallery/nguye-aha3.jpeg'
 ],
 show_gallery: false
 },
