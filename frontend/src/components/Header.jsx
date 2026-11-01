@@ -1,117 +1,74 @@
 // src/components/Header.jsx
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-
-const NavItem = ({ to, label, onClick }) => (
-  <NavLink
-    to={to}
-    className={({ isActive }) => 'nav-link' + (isActive ? ' nav-active' : '')}
-    onClick={onClick}
-  >
-    {label}
-  </NavLink>
-)
+import { NAV_ITEMS, SOCIAL_LINKS } from '../lib/site'
+import { InstagramIcon, YouTubeIcon } from './Icons.jsx'
 
 export default function Header() {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
 
-  const closeMenu = () => setOpen(false)
+  // close menu on navigation
+  useEffect(() => { setOpen(false) }, [location.pathname])
 
   useEffect(() => {
-    if (open) document.body.classList.add('no-scroll')
-    else document.body.classList.remove('no-scroll')
+    document.body.classList.toggle('no-scroll', open)
     return () => document.body.classList.remove('no-scroll')
   }, [open])
 
   useEffect(() => {
-    closeMenu()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname])
-
-  useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth >= 860) closeMenu()
-    }
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // The mobile menu is a sibling of <header>: the header's backdrop-filter would otherwise
+  // become the containing block for the fixed-position menu.
   return (
-    <header className="header">
-      <div className="container header-inner header-rel">
-        {/* Hamburger (LEFT) */}
-        <button
-          className={`hamburger ${open ? 'open' : ''}`}
-          aria-label="Menu"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          onClick={() => setOpen(o => !o)}
-        >
-          <span className="ham-line" />
-        </button>
+    <>
+      <header className={`header ${scrolled || open ? 'is-solid' : ''}`}>
+        <div className="container header-inner">
+          <Link to="/" className="brand" aria-label="Ricky Password home">
+            Ricky<span>Password</span>
+          </Link>
 
-        {/* Brand (CENTER on mobile, left on desktop) */}
-        <Link to="/" className="brand" onClick={closeMenu}>
-          Rickypassword<span className="brand-accent">.</span>
-        </Link>
+          <nav className="nav" aria-label="Main">
+            {NAV_ITEMS.map((n) => (
+              <NavLink key={n.to} to={n.to} end={n.to === '/'} className="nav-link">
+                {n.label}
+              </NavLink>
+            ))}
+          </nav>
 
-        {/* Desktop nav (center on ≥860px) */}
-        <nav className="nav">
-          <NavItem to="/" label="HOME" />
-          <NavItem to="/music" label="MUSIC" />
-          <NavItem to="/shows" label="SHOWS" />
-          <NavItem to="/news" label="NEWS" />
-          <NavItem to="/gallery" label="GALLERY" />
-          <NavItem to="/bio" label="BIO" />
-          <NavItem to="/contact" label="CONTACT" />
-        </nav>
-
-        {/* Socials (RIGHT) */}
-        <div className="nav-right">
-          <a
-            href="https://youtube.com/@rickypasswordrwa"
-            aria-label="YouTube"
-            className="social"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.7 3 12 3 12 3s-6.7 0-8.7.4A4 4 0 0 0 .5 6.2C0 8.3 0 12 0 12s0 3.7.5 5.8a4 4 0 0 0 2.8 2.8C5.3 21 12 21 12 21s6.7 0 8.7-.4a4 4 0 0 0 2.8-2.8c.5-2.1.5-5.8.5-5.8s0-3.7-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z" />
-            </svg>
-          </a>
-
-          <a
-            href="https://www.instagram.com/rickypassword/"
-            aria-label="Instagram"
-            className="social"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 2a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM18 5.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-            </svg>
-          </a>
+          <div className="header-end">
+            <a href={SOCIAL_LINKS.youtube} aria-label="YouTube" className="social" target="_blank" rel="noreferrer">
+              <YouTubeIcon width={18} height={18} />
+            </a>
+            <a href={SOCIAL_LINKS.instagram} aria-label="Instagram" className="social" target="_blank" rel="noreferrer">
+              <InstagramIcon width={18} height={18} />
+            </a>
+            <button
+              className={`hamburger ${open ? 'open' : ''}`}
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+              aria-controls="mobile-nav"
+              onClick={() => setOpen((o) => !o)}
+            >
+              <span />
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile dropdown (slides DOWN from header) */}
-      <div
-        id="mobile-nav"
-        className={`mobile-dropdown ${open ? 'open' : ''}`}
-        role="navigation"
-        aria-hidden={!open}
-      >
-        <div className="container mobile-dropdown-inner">
-          <NavItem to="/" label="HOME" onClick={closeMenu} />
-          <NavItem to="/music" label="MUSIC" onClick={closeMenu} />
-          <NavItem to="/shows" label="SHOWS" onClick={closeMenu} />
-          <NavItem to="/news" label="NEWS" onClick={closeMenu} />
-          <NavItem to="/gallery" label="GALLERY" onClick={closeMenu} />
-          <NavItem to="/bio" label="BIO" onClick={closeMenu} />
-          <NavItem to="/contact" label="CONTACT" onClick={closeMenu} />
-        </div>
-      </div>
-    </header>
+      <nav id="mobile-nav" className={`mobile-nav ${open ? 'open' : ''}`} aria-label="Mobile" inert={!open}>
+        {NAV_ITEMS.map((n, i) => (
+          <NavLink key={n.to} to={n.to} end={n.to === '/'} className="mobile-link" style={{ '--i': i }}>
+            {n.label}
+          </NavLink>
+        ))}
+      </nav>
+    </>
   )
 }

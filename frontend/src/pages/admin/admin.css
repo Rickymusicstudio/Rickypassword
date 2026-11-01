@@ -1,0 +1,117 @@
+/* Admin — builds on the site tokens in index.css */
+.admin { min-height: 100vh; }
+.admin-center { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.admin-card { padding: clamp(18px, 3vw, 28px); border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); }
+.admin-title { font-size: 28px; font-weight: 800; margin: 14px 0 8px; }
+.admin code { background: var(--surface-2); padding: 2px 6px; border-radius: 6px; }
+
+.admin-top {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(13, 12, 10, .9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.admin-top-inner { display: flex; align-items: center; gap: 16px; min-height: 64px; flex-wrap: wrap; padding-block: 10px; }
+.admin-top .brand small {
+  font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin-left: 6px;
+}
+.admin-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); }
+.admin-tabs button {
+  appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer;
+  padding: 8px 16px; border-radius: 999px; font: 700 14px var(--font-body);
+}
+.admin-tabs button.active { background: var(--accent); color: var(--accent-ink); }
+.admin-user { display: flex; gap: 8px; margin-left: auto; }
+@media (max-width: 640px) {
+  .admin-tabs { order: 3; width: 100%; justify-content: space-between; }
+  .admin-tabs button { flex: 1; }
+}
+
+.admin-main { padding-block: 28px 80px; }
+.admin-section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.admin-section-head h2, .admin-form-head h2 { font-size: 30px; font-weight: 800; }
+.admin-section-head p { margin: 2px 0 0; }
+
+.admin-list { display: grid; gap: 8px; }
+.admin-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--border);
+}
+.admin-row > img, .admin-row-ph { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: var(--surface-2); flex: none; }
+.admin-row-main { flex: 1; min-width: 160px; display: grid; }
+.admin-row-main strong { font-size: 15px; }
+.admin-row-main span { font-size: 13px; }
+.admin-empty { padding: 24px 0; }
+.badge {
+  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  background: rgba(242, 181, 68, .14); color: var(--accent);
+}
+.btn-danger:hover { color: var(--danger); border-color: rgba(255, 138, 128, .5); }
+
+/* Forms */
+.admin-form { display: grid; gap: 20px; max-width: 980px; }
+.admin-form-head, .admin-form-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.admin-form-foot { justify-content: flex-end; padding-top: 4px; }
+.form-cols { display: grid; gap: 20px; }
+@media (min-width: 820px) { .form-cols { grid-template-columns: 1fr 300px; } }
+.form-stack { display: grid; gap: 16px; align-content: start; }
+.admin .field { display: grid; gap: 8px; }
+.admin .field > span, .admin-center .field > span { font-size: 14px; font-weight: 600; color: #d9d2c4; }
+.admin .field small { font-size: 13px; }
+.input-sm { padding: 8px 10px; font-size: 14px; }
+textarea.story { min-height: 280px; line-height: 1.7; }
+.toggles { display: grid; gap: 10px; padding-top: 4px; }
+
+.upload {
+  display: grid; gap: 12px; padding: 12px;
+  border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); background: var(--bg);
+}
+.upload.image img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; }
+.upload audio { width: 100%; }
+.upload-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+.thumb { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: var(--surface-2); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.thumb button {
+  position: absolute; top: 6px; right: 6px; width: 26px; height: 26px; border-radius: 999px;
+  display: grid; place-items: center; border: 0; cursor: pointer; background: rgba(0, 0, 0, .7); color: #fff;
+}
+.thumb-add {
+  appearance: none; border: 1px dashed var(--border-strong); color: var(--muted); cursor: pointer;
+  font: 700 13px var(--font-body); padding: 8px;
+}
+.thumb-add:hover { color: var(--text); border-color: var(--accent); }
+
+/* Gallery */
+.dropzone {
+  appearance: none; width: 100%; display: grid; gap: 6px; place-items: center; text-align: center;
+  padding: 36px 16px; margin-bottom: 20px; cursor: pointer; color: var(--text); font: inherit;
+  border: 2px dashed var(--border-strong); border-radius: var(--radius); background: var(--surface);
+  transition: border-color .2s ease, background .2s ease;
+}
+.dropzone:hover, .dropzone.is-drag { border-color: var(--accent); background: rgba(242, 181, 68, .06); }
+.dropzone:disabled { cursor: progress; }
+.admin-gallery { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+.admin-gallery figure { position: relative; margin: 0; display: grid; gap: 8px; }
+.admin-gallery figure img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius-sm); background: var(--surface-2); }
+.admin-gallery-del {
+  position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border-radius: 999px;
+  display: grid; place-items: center; border: 0; cursor: pointer; background: rgba(0, 0, 0, .7); color: #fff;
+}
+.admin-gallery-del:hover { background: #b3261e; }
+
+.admin-toast {
+  position: fixed; left: 50%; bottom: 24px; translate: -50% 0; z-index: 100;
+  padding: 12px 18px; border-radius: 12px; font-weight: 700; max-width: calc(100% - 32px);
+  background: var(--text); color: var(--bg); box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
+  animation: pop .25s var(--ease) both;
+}
+.admin-toast.err { background: #3b1513; color: #ffd7d3; border: 1px solid rgba(255, 138, 128, .5); }
+
+.import-banner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+  margin-bottom: 24px; border-color: rgba(242, 181, 68, .45);
+  background: radial-gradient(120% 140% at 0% 0%, rgba(242, 181, 68, .14), transparent 60%), var(--surface);
+}
+.import-banner p { margin: 6px 0 0; max-width: 62ch; }
