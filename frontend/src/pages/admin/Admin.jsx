@@ -6,6 +6,7 @@ import { isAdmin, signOut } from './adminApi'
 import MusicTab from './MusicTab.jsx'
 import NewsTab from './NewsTab.jsx'
 import GalleryTab from './GalleryTab.jsx'
+import { importLegacy } from './legacyImport'
 import './admin.css'
 
 const TABS = [
@@ -28,10 +29,55 @@ export function NotConfigured() {
   )
 }
 
+/** Shown while the database is empty: one click copies the site's built-in content in. */
+function ImportBanner({ notify, onDone }) {
+  const [show, setShow] = useState(false)
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    const count = (t) => supabase.from(t).select('id', { count: 'exact', head: true }).then((r) => r.count || 0)
+    Promise.all(['songs', 'news', 'gallery'].map(count))
+      .then((n) => setShow(n.every((c) => c === 0)))
+      .catch(() => {})
+  }, [])
+
+  if (!show) return null
+
+  const run = async () => {
+    setBusy(true)
+    try {
+      const c = await importLegacy(supabase)
+      notify(`Imported ${c.songs} songs, ${c.news} articles and ${c.gallery} photos`)
+      setShow(false)
+      onDone()
+    } catch (e) {
+      notify(e.message, 'err')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="admin-card import-banner">
+      <div>
+        <strong>Bring in your existing music, news and photos</strong>
+        <p className="muted">
+          The songs, articles and gallery photos already on the website aren’t in the admin yet.
+          Import them once and you can edit or delete them here.
+        </p>
+      </div>
+      <button className="btn btn-primary" onClick={run} disabled={busy}>
+        {busy ? 'Importing…' : 'Import existing content'}
+      </button>
+    </div>
+  )
+}
+
 export default function Admin() {
   const [state, setState] = useState({ status: 'loading', email: '' }) // loading | signedOut | denied | ok
   const [tab, setTab] = useState(() => sessionStorage.getItem('rp:admin:tab') || 'music')
   const [toast, setToast] = useState(null)
+  const [reloadKey, setReloadKey] = useState(0)
   const timer = useRef(null)
 
   useEffect(() => {
@@ -93,7 +139,8 @@ export default function Admin() {
       </header>
 
       <main className="container admin-main">
-        <Active key={tab} notify={notify} />
+        <ImportBanner notify={notify} onDone={() => setReloadKey((k) => k + 1)} />
+        <Active key={`${tab}-${reloadKey}`} notify={notify} />
       </main>
 
       {toast && <div className={`admin-toast ${toast.kind}`} role="status">{toast.text}</div>}
