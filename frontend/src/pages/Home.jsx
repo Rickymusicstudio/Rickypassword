@@ -1,43 +1,91 @@
 // src/pages/Home.jsx
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Hero from '../components/Hero.jsx'
-import artist from '/gallery/image17.jpg'
+import TrackCard from '../components/TrackCard.jsx'
+import Img from '../components/Img.jsx'
+import { ArrowIcon, InstagramIcon, YouTubeIcon } from '../components/Icons.jsx'
+import { TRACKS } from '../data/tracks'
+import { NEWS } from '../data/news'
+import { SOCIAL_LINKS, fmtDate } from '../lib/site'
+
+const latestNews = [...NEWS].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3)
+const newsImage = (p) => p.cover_url || p.images_share?.[0] || p.images?.[0] || ''
 
 export default function Home() {
-  const navigate = useNavigate()
-  const goToMusic = () => navigate('/music')
-
   return (
-    <main className="home-page">
-      {/* Hero sits under the fixed header; Play -> /music */}
-      <Hero onPlay={goToMusic} />
+    <div className="home-page">
+      <Hero />
 
-      {/* About */}
-      <section id="about" className="section-white">
-        <div className="container" style={{ paddingBlock: '56px' }}>
-          <div className="about-grid">
-            <img
-              src={artist}
-              alt="Ricky Password portrait"
-              className="about-img"
-              loading="lazy"
-              decoding="async"
-            />
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <h2 className="section-title">Latest releases</h2>
+            <Link to="/music" className="link-arrow">All music <ArrowIcon width={18} height={18} /></Link>
+          </div>
+          <div className="rail">
+            {TRACKS.slice(0, 8).map((t) => <TrackCard key={t.sku} track={t} />)}
+          </div>
+        </div>
+      </section>
+
+      {latestNews.length > 0 && (
+        <section className="section section-alt">
+          <div className="container">
+            <div className="section-head">
+              <h2 className="section-title">News</h2>
+              <Link to="/news" className="link-arrow">All news <ArrowIcon width={18} height={18} /></Link>
+            </div>
+            <div className="news-grid">
+              {latestNews.map((p) => (
+                <Link key={p.slug} to={`/news/${p.slug}`} className="news-card">
+                  <div className="news-card-img">
+                    {newsImage(p) && <Img src={newsImage(p)} alt="" />}
+                  </div>
+                  <div className="news-card-body">
+                    <time className="eyebrow">{fmtDate(p.date)}</time>
+                    <h3>{p.title}</h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="section">
+        <div className="container about-grid">
+          <Img src="/gallery/image17.jpg" alt="Ricky Password portrait" className="about-img" />
+          <div>
+            <p className="eyebrow">About</p>
+            <h2 className="section-title">A vibrant voice in Rwanda's music scene</h2>
+            <p className="lead">
+              Ricky Password began his musical journey in 2011, blending creativity with an energetic stage presence.
+              He has performed at Kigali Up Festival and FESPAD, and in 2014 became a lauréat of VISA pour la Création
+              (French Institute). Notable works include “Pretend” featuring Gabiro.
+            </p>
+            <Link to="/bio" className="btn btn-ghost">Read the full bio <ArrowIcon width={18} height={18} /></Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="cta-band">
             <div>
-              <h2 className="h2">Ricky Password</h2>
-              <p className="lead">
-                Ricky Password is a Rwandan artist who began his musical journey in 2011. Over the years, he has
-                established himself as a vibrant voice in Rwanda’s contemporary music scene, blending creativity with
-                energetic stage presence. Early in his career, Ricky performed on prestigious stages such as Kigali Up
-                Festival and FESPAD. In 2014, he became a lauréat of VISA pour la Création (French Institute), earning
-                recognition beyond Rwanda. Notable works include “Pretend” featuring Gabiro, reflecting his collaborative
-                spirit and versatility. With passion and steady growth, Ricky continues to shape Rwanda’s music identity,
-                inspiring audiences with performances and songs that cross borders.
-              </p>
+              <h2 className="cta-title">Never miss a drop</h2>
+              <p className="muted">New music, shows and studio moments, first on YouTube and Instagram.</p>
+            </div>
+            <div className="cta-actions">
+              <a className="btn btn-primary" href={SOCIAL_LINKS.youtube} target="_blank" rel="noreferrer">
+                <YouTubeIcon width={18} height={18} /> Subscribe
+              </a>
+              <a className="btn btn-ghost" href={SOCIAL_LINKS.instagram} target="_blank" rel="noreferrer">
+                <InstagramIcon width={18} height={18} /> Follow
+              </a>
             </div>
           </div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }
