@@ -4,6 +4,7 @@ import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
+import { ContentProvider } from './data/ContentContext.jsx'
 import { PlayerProvider } from './player/PlayerContext.jsx'
 import PlayerBar from './player/PlayerBar.jsx'
 
@@ -30,16 +31,18 @@ function ScrollToTop() {
 /* Public layout: wraps pages with site chrome + the persistent player */
 function PublicLayout() {
   return (
-    <PlayerProvider>
-      <ScrollToTop />
-      <a className="skip-link" href="#content">Skip to content</a>
-      <Header />
-      <main id="content">
-        <Outlet />
-      </main>
-      <Footer />
-      <PlayerBar />
-    </PlayerProvider>
+    <ContentProvider>
+      <PlayerProvider>
+        <ScrollToTop />
+        <a className="skip-link" href="#content">Skip to content</a>
+        <Header />
+        <main id="content">
+          <Outlet />
+        </main>
+        <Footer />
+        <PlayerBar />
+      </PlayerProvider>
+    </ContentProvider>
   )
 }
 

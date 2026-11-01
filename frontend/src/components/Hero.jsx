@@ -2,12 +2,13 @@
 import { Link } from 'react-router-dom'
 import heroImg from '../assets/hero.webp'
 import { usePlayer } from '../player/PlayerContext.jsx'
-import { TRACKS, mediaUrl } from '../data/tracks'
+import { mediaUrl } from '../data/tracks'
+import { useContent } from '../data/ContentContext.jsx'
 import { ArrowIcon, PauseIcon, PlayIcon } from './Icons.jsx'
 
 export default function Hero() {
   const { current, playing, play } = usePlayer()
-  const latest = TRACKS[0]
+  const latest = useContent().tracks[0]
   const isPlaying = latest && current?.sku === latest.sku && playing
 
   return (

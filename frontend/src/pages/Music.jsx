@@ -3,12 +3,13 @@ import { usePlayer } from '../player/PlayerContext.jsx'
 import TrackCard from '../components/TrackCard.jsx'
 import Img from '../components/Img.jsx'
 import { DownloadIcon, PauseIcon, PlayIcon } from '../components/Icons.jsx'
-import { TRACKS } from '../data/tracks'
+import { useContent } from '../data/ContentContext.jsx'
 import { fmtDate } from '../lib/site'
 
 export default function Music() {
   const { current, playing, play, download } = usePlayer()
-  const [latest, ...rest] = TRACKS
+  const { tracks } = useContent()
+  const [latest, ...rest] = tracks
   const latestPlaying = latest && current?.sku === latest.sku && playing
 
   return (
@@ -18,7 +19,7 @@ export default function Music() {
           <p className="eyebrow">Discography</p>
           <h1 className="page-title">Music</h1>
           <p className="page-intro">
-            {TRACKS.length} tracks. Press play and keep browsing; the player follows you around the site.
+            {tracks.length} tracks. Press play and keep browsing; the player follows you around the site.
           </p>
         </div>
       </header>
@@ -35,7 +36,7 @@ export default function Music() {
                 <h2 className="feature-title">{latest.title}</h2>
                 <p className="muted">Ricky Password</p>
                 <div className="feature-actions">
-                  <button className="btn btn-primary" onClick={() => play(latest, TRACKS)}>
+                  <button className="btn btn-primary" onClick={() => play(latest, tracks)}>
                     {latestPlaying ? <PauseIcon width={18} height={18} /> : <PlayIcon width={18} height={18} />}
                     {latestPlaying ? 'Pause' : 'Play'}
                   </button>
@@ -52,7 +53,7 @@ export default function Music() {
               <h2 className="section-title">All tracks</h2>
             </div>
             <div className="music-grid">
-              {rest.map((t) => <TrackCard key={t.sku} track={t} list={TRACKS} showDownload />)}
+              {rest.map((t) => <TrackCard key={t.sku} track={t} list={tracks} showDownload />)}
             </div>
           </>
         ) : (

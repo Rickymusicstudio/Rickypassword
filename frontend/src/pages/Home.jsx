@@ -4,14 +4,15 @@ import Hero from '../components/Hero.jsx'
 import TrackCard from '../components/TrackCard.jsx'
 import Img from '../components/Img.jsx'
 import { ArrowIcon, InstagramIcon, YouTubeIcon } from '../components/Icons.jsx'
-import { TRACKS } from '../data/tracks'
-import { NEWS } from '../data/news'
+import { useContent } from '../data/ContentContext.jsx'
 import { SOCIAL_LINKS, fmtDate } from '../lib/site'
 
-const latestNews = [...NEWS].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3)
 const newsImage = (p) => p.cover_url || p.images_share?.[0] || p.images?.[0] || ''
 
 export default function Home() {
+  const { tracks, news } = useContent()
+  const latestNews = news.slice(0, 3)
+
   return (
     <div className="home-page">
       <Hero />
@@ -23,7 +24,7 @@ export default function Home() {
             <Link to="/music" className="link-arrow">All music <ArrowIcon width={18} height={18} /></Link>
           </div>
           <div className="rail">
-            {TRACKS.slice(0, 8).map((t) => <TrackCard key={t.sku} track={t} />)}
+            {tracks.slice(0, 8).map((t) => <TrackCard key={t.sku} track={t} />)}
           </div>
         </div>
       </section>

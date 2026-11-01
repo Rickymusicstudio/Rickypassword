@@ -16,6 +16,7 @@
     "images": "node tools/optimize-images.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "axios": "^1.21.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

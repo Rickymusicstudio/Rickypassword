@@ -1,21 +1,12 @@
 // src/pages/Gallery.jsx
 import { useCallback, useMemo, useState } from 'react'
-import { GALLERY } from '../data/gallery'
+import { useContent } from '../data/ContentContext.jsx'
 import Img from '../components/Img.jsx'
 import Lightbox from '../components/Lightbox.jsx'
 
-const resolveSrc = (item) =>
-  item?.src ? item.src : item?.file ? `/gallery/${item.file}` : ''
-
 export default function Gallery() {
-  // newest first
-  const items = useMemo(
-    () =>
-      GALLERY.filter((it) => resolveSrc(it))
-        .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0)),
-    []
-  )
-  const sources = useMemo(() => items.map(resolveSrc), [items])
+  const items = useContent().gallery // newest first
+  const sources = useMemo(() => items.map((it) => it.src), [items])
 
   const [idx, setIdx] = useState(-1)
   const close = useCallback(() => setIdx(-1), [])

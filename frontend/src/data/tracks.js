@@ -1,4 +1,4 @@
-// src/data/tracks.js — normalized, sorted, published tracks built from songs.js
+// src/data/tracks.js — track normalization shared by the built-in songs.js and the database
 import * as songsModule from './songs'
 
 // pull songs no matter how it's exported
@@ -20,23 +20,30 @@ export const mediaUrl = (u = '') => {
 
 export const toFileName = (t = 'track') => `${t.replace(/[^\w-]+/g, '_')}.mp3`
 
-export const TRACKS = getSongsArray(songsModule)
-  .map((x) => {
-    const ytOnly = x.youtube_only === true || x.listen === 'youtube'
-    return {
-      sku: x.sku ?? x.id ?? x.title,
-      title: x.title ?? '',
-      cover_url: x.cover_url ?? x.cover ?? '/covers/star_cover.jpg',
-      released_at: x.released_at ?? x.release_date ?? null,
-      media_path: x.media_path ?? x.audio ?? '',
-      preview_url: x.preview_url ?? x.audio ?? x.media_path ?? '',
-      youtube_url: x.youtube_url ?? x.youtube ?? '',
-      ytOnly,
-      hidden: x.hidden === true || x.is_published === false,
-      can_download: x.can_download !== false && !ytOnly,
-    }
-  })
-  .filter((t) => !t.hidden)
-  .sort((a, b) => new Date(b.released_at || 0) - new Date(a.released_at || 0))
+/** Accepts both songs.js entries and `songs` table rows. */
+export function normalizeTrack(x) {
+  const ytOnly = x.youtube_only === true || x.listen === 'youtube'
+  const audio = x.audio_url ?? x.media_path ?? x.audio ?? ''
+  return {
+    sku: x.id ?? x.sku ?? x.title,
+    title: x.title ?? '',
+    cover_url: x.cover_url ?? x.cover ?? '/covers/star_cover.jpg',
+    released_at: x.released_at ?? x.release_date ?? null,
+    media_path: audio,
+    preview_url: x.preview_url ?? audio,
+    youtube_url: x.youtube_url ?? x.youtube ?? '',
+    ytOnly,
+    hidden: x.hidden === true || x.is_published === false || x.published === false,
+    can_download: x.can_download !== false && !ytOnly && !!audio,
+  }
+}
+
+export const sortTracks = (list) =>
+  list
+    .map(normalizeTrack)
+    .filter((t) => !t.hidden)
+    .sort((a, b) => new Date(b.released_at || 0) - new Date(a.released_at || 0))
+
+export const STATIC_TRACKS = sortTracks(getSongsArray(songsModule))
 
 export const releaseYear = (t) => (t?.released_at ? new Date(t.released_at).getFullYear() : '')

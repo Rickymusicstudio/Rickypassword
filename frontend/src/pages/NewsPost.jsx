@@ -1,7 +1,7 @@
 // src/pages/NewsPost.jsx
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
-import { NEWS } from '../data/news'
+import { useContent } from '../data/ContentContext.jsx'
 import { adminApi } from '../lib/adminApi'
 import { fmtDate } from '../lib/site'
 import Img from '../components/Img.jsx'
@@ -43,7 +43,7 @@ export default function NewsPost() {
   // Support both /share/news/:slug and the short /n/:slug
   const isShare = location.pathname.startsWith('/share/news/') || location.pathname.startsWith('/n/')
 
-  const sorted = useMemo(() => [...NEWS].sort((a, b) => new Date(b.date) - new Date(a.date)), [])
+  const sorted = useContent().news
   const post = sorted.find((n) => n.slug === slug)
   const more = sorted.filter((n) => n.slug !== slug).slice(0, 3)
 

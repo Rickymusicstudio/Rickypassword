@@ -1,15 +1,14 @@
 // src/pages/News.jsx
 import { Link } from 'react-router-dom'
-import { NEWS } from '../data/news'
+import { useContent } from '../data/ContentContext.jsx'
 import { SOCIAL_LINKS, fmtDate } from '../lib/site'
 import Img from '../components/Img.jsx'
 import { ArrowIcon, InstagramIcon, YouTubeIcon } from '../components/Icons.jsx'
 
-const posts = [...NEWS].sort((a, b) => new Date(b.date) - new Date(a.date))
 const newsImage = (p) => p.cover_url || p.images_share?.[0] || p.images?.[0] || ''
 
 export default function News() {
-  const [lead, ...rest] = posts
+  const [lead, ...rest] = useContent().news
 
   return (
     <div className="news-page">

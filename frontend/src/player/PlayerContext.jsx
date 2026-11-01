@@ -2,7 +2,8 @@
 // Listening/downloading still goes through the YouTube + Instagram subscribe gate.
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { SOCIAL_LINKS } from '../lib/site'
-import { TRACKS, mediaUrl, toFileName } from '../data/tracks'
+import { mediaUrl, toFileName } from '../data/tracks'
+import { useContent } from '../data/ContentContext.jsx'
 import GateModal from './GateModal.jsx'
 
 const PlayerContext = createContext(null)
@@ -28,8 +29,9 @@ function downloadTrack(t) {
 }
 
 export function PlayerProvider({ children }) {
+  const { tracks } = useContent()
   const audioRef = useRef(null)
-  const [queue, setQueue] = useState(TRACKS)
+  const [queue, setQueue] = useState(tracks)
   const [index, setIndex] = useState(-1)
   const [playing, setPlaying] = useState(false)
   const [time, setTime] = useState({ current: 0, duration: 0 })
@@ -50,10 +52,10 @@ export function PlayerProvider({ children }) {
   const run = useCallback((intent) => {
     const { type, track, list } = intent
     if (type === 'download') return downloadTrack(track)
-    const q = (list || TRACKS).filter((t) => !t.ytOnly)
+    const q = (list || tracks).filter((t) => !t.ytOnly)
     const i = q.findIndex((t) => t.sku === track.sku)
     load(q, Math.max(i, 0))
-  }, [load])
+  }, [load, tracks])
 
   /** Play a track (optionally within a list). YouTube-only tracks skip the gate. */
   const play = useCallback((track, list) => {
