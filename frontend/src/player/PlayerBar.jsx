@@ -1,4 +1,5 @@
 // src/player/PlayerBar.jsx — persistent bottom player
+import { Link } from 'react-router-dom'
 import { usePlayer } from './PlayerContext.jsx'
 import { mediaUrl } from '../data/tracks'
 import { CloseIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon } from '../components/Icons.jsx'
@@ -29,13 +30,13 @@ export default function PlayerBar() {
         />
       </div>
       <div className="container playerbar-inner">
-        <div className="playerbar-track">
+        <Link to={`/music/${current.slug}`} className="playerbar-track" title="Open song page">
           <img src={mediaUrl(current.cover_url)} alt="" className={playing ? 'spin' : ''} />
           <div className="playerbar-meta">
             <div className="playerbar-title">{current.title}</div>
             <div className="playerbar-sub">Ricky Password</div>
           </div>
-        </div>
+        </Link>
 
         <div className="playerbar-controls">
           <button className="icon-btn" onClick={prev} aria-label="Previous track"><PrevIcon /></button>

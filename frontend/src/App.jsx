@@ -11,6 +11,7 @@ import PlayerBar from './player/PlayerBar.jsx'
 /* -------- Public pages -------- */
 import Home from './pages/Home.jsx'
 import Music from './pages/Music.jsx'
+import Song from './pages/Song.jsx'
 import Shows from './pages/Shows.jsx'
 import News from './pages/News.jsx'
 import NewsPost from './pages/NewsPost.jsx'
@@ -24,7 +25,8 @@ const Admin = lazy(() => import('./pages/admin/Admin.jsx'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  // 'instant' overrides the CSS smooth scrolling, which could leave a new page half-way down
+  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }) }, [pathname])
   return null
 }
 
@@ -62,6 +64,7 @@ export default function App() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/music" element={<Music />} />
+        <Route path="/music/:slug" element={<Song />} />
         <Route path="/shows" element={<Shows />} />
         <Route path="/news" element={<News />} />
         <Route path="/news/:slug" element={<NewsPost />} />

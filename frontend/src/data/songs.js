@@ -83,7 +83,7 @@ export const songs = [
     title: 'NAKUJYUNA',
     cover_url: '/covers/nakujyuna.jpg', // .jpg or .png as on disk
     preview_url: '/audio/Nakujyuna.mp3',
-    media_path:  '/Nakujyuna.mp3',
+    media_path:  '/audio/Nakujyuna.mp3',
     released_at: '2023-05-21',
   },
 {
@@ -91,7 +91,7 @@ export const songs = [
     title: 'FAMOUS',
     cover_url: '/covers/famous.jpg', // .jpg or .png as on disk
     preview_url: '/audio/Famous.mp3',
-    media_path:  '/Famous.mp3',
+    media_path:  '/audio/Famous.mp3',
     released_at: '2022-05-18',
   },
 
@@ -100,7 +100,7 @@ export const songs = [
     title: 'STAR',
     cover_url: '/covers/star_cover.jpg', // .jpg or .png as on disk
     preview_url: '/audio/Star.mp3',
-    media_path:  '/Star.mp3',
+    media_path:  '/audio/Star.mp3',
     released_at: '2024-11-18',
   },
 
@@ -109,7 +109,7 @@ export const songs = [
     title: 'JE T AIME',
     cover_url: '/covers/star_cover.jpg', // .jpg or .png as on disk
     preview_url: '/audio/JETAIME.mp3',
-    media_path:  '/JETAIME.mp3',
+    media_path:  '/audio/JETAIME.mp3',
     released_at: '2024-08-18',
   },
 
@@ -118,7 +118,7 @@ export const songs = [
     title: 'MEDECINE',
     cover_url: '/covers/medecine.jpg', // .jpg or .png as on disk
     preview_url: '/audio/Medecine.mp3',
-    media_path:  '/Medecine.mp3',
+    media_path:  '/audio/Medecine.mp3',
     released_at: '2022-12-01',
   },
 
@@ -127,7 +127,7 @@ export const songs = [
     title: 'UMUKUNZI UTANZI',
     cover_url: '/covers/umukunzi.jpg', // .jpg or .png as on disk
     preview_url: '/audio/UMUKUNZI UTANZI.mp3',
-    media_path:  '/UMUKUNZI UTANZI.mp3',
+    media_path:  '/audio/UMUKUNZI UTANZI.mp3',
     released_at: '2012-06-01',
   },
 
@@ -136,7 +136,7 @@ export const songs = [
     title: 'NEW DAY',
     cover_url: '/covers/NEW DAY.jpg', // .jpg or .png as on disk
     preview_url: '/audio/NEW DAY.mp3',
-    media_path:  '/NEW DAY.mp3',
+    media_path:  '/audio/NEW DAY.mp3',
     released_at: '2020-06-01',
   },
 
@@ -145,7 +145,7 @@ export const songs = [
     title: 'NARAGUKUNDAGA FT ELION VICTORY',
     cover_url: '/covers/naragukundaga.jpg', // .jpg or .png as on disk
     preview_url: '/audio/Naragukundaga.mp3',
-    media_path:  '/Naragukundaga.mp3',
+    media_path:  '/audio/Naragukundaga.mp3',
     released_at: '2012-06-01',
   },
 
@@ -154,7 +154,7 @@ export const songs = [
     title: 'FURAHI DAY',
     cover_url: '/covers/furahiday.jpg', // .jpg or .png as on disk
     preview_url: '/audio/Furahi day.mp3',
-    media_path:  '/Furahi day.mp3',
+    media_path:  '/audio/Furahi day.mp3',
     released_at: '2013-06-01',
   },
 

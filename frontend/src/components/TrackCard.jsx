@@ -1,4 +1,5 @@
 // src/components/TrackCard.jsx — cover-art card with play state, used on Home and Music
+import { Link } from 'react-router-dom'
 import { usePlayer } from '../player/PlayerContext.jsx'
 import { releaseYear } from '../data/tracks'
 import Img from './Img.jsx'
@@ -12,7 +13,9 @@ export default function TrackCard({ track, list, showDownload = false }) {
   return (
     <article className={`track-card ${active ? 'is-active' : ''}`}>
       <div className="track-art">
-        <Img src={track.cover_url} alt={`${track.title} cover art`} />
+        <Link to={`/music/${track.slug}`} state={{ autoplay: true }} className="track-link" aria-label={`Open ${track.title}`}>
+          <Img src={track.cover_url} alt={`${track.title} cover art`} />
+        </Link>
         <button
           className="track-play"
           onClick={() => play(track, list)}
@@ -24,7 +27,7 @@ export default function TrackCard({ track, list, showDownload = false }) {
       </div>
       <div className="track-info">
         <div>
-          <h3 className="track-title">{track.title}</h3>
+          <h3 className="track-title"><Link to={`/music/${track.slug}`} state={{ autoplay: true }}>{track.title}</Link></h3>
           <p className="track-meta">
             {releaseYear(track)}{track.ytOnly ? ' · YouTube' : ''}
           </p>

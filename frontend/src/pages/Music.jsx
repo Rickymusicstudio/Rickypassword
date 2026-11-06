@@ -1,4 +1,5 @@
 // src/pages/Music.jsx
+import { Link } from 'react-router-dom'
 import { usePlayer } from '../player/PlayerContext.jsx'
 import TrackCard from '../components/TrackCard.jsx'
 import Img from '../components/Img.jsx'
@@ -29,11 +30,13 @@ export default function Music() {
           <>
             <div className="feature">
               <div className="feature-art">
-                <Img src={latest.cover_url} alt={`${latest.title} cover art`} full />
+                <Link to={`/music/${latest.slug}`} state={{ autoplay: true }} aria-label={`Open ${latest.title}`}>
+                  <Img src={latest.cover_url} alt={`${latest.title} cover art`} full />
+                </Link>
               </div>
               <div>
                 <p className="eyebrow">Latest release · {fmtDate(latest.released_at, { month: 'long', year: 'numeric' })}</p>
-                <h2 className="feature-title">{latest.title}</h2>
+                <h2 className="feature-title"><Link to={`/music/${latest.slug}`} className="link-plain">{latest.title}</Link></h2>
                 <p className="muted">Ricky Password</p>
                 <div className="feature-actions">
                   <button className="btn btn-primary" onClick={() => play(latest, tracks)}>

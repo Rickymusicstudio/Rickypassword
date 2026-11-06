@@ -1,14 +1,10 @@
 // src/pages/admin/adminApi.js — Supabase helpers for the admin (auth, uploads, CRUD)
 import { supabase, MEDIA_BUCKET } from '../../lib/supabase'
+import { slugify } from '../../lib/site'
+
+export { slugify }
 
 export const MAX_UPLOAD_MB = 50
-
-export const slugify = (s = '') =>
-  s.toLowerCase()
-    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 80)
 
 export const today = () => new Date().toISOString().slice(0, 10)
 
