@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { list, niceError, remove, removeMedia, save, today } from './adminApi'
 import { Field, Toggle, UploadField } from './fields.jsx'
 import { mediaUrl } from '../../data/tracks'
+import { supabase } from '../../lib/supabase'
 import { fmtDate } from '../../lib/site'
 
 const EMPTY = {
@@ -14,6 +15,15 @@ export default function MusicTab({ notify }) {
   const [rows, setRows] = useState(null)
   const [edit, setEdit] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [likes, setLikes] = useState({})
+
+  useEffect(() => {
+    supabase.from('song_likes').select('song_id').then(({ data }) => {
+      const n = {}
+      for (const l of data || []) n[l.song_id] = (n[l.song_id] || 0) + 1
+      setLikes(n)
+    })
+  }, [])
 
   const load = useCallback(() => {
     list('songs', [['released_at', false], ['created_at', false]]).then(setRows).catch((e) => { setRows(false); notify(niceError(e), 'err') })
@@ -102,7 +112,7 @@ export default function MusicTab({ notify }) {
             <div className="admin-row-main">
               <strong>{r.title}</strong>
               <span className="muted">
-                {fmtDate(r.released_at) || 'No date'}{r.youtube_only ? ' · YouTube only' : ''}
+                {fmtDate(r.released_at) || 'No date'}{r.youtube_only ? ' · YouTube only' : ''}{likes[r.id] ? ` · ♥ ${likes[r.id]}` : ''}
               </span>
             </div>
             {!r.published && <span className="badge">Hidden</span>}

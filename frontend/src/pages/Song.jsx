@@ -7,6 +7,8 @@ import { mediaUrl } from '../data/tracks'
 import { fmtDate } from '../lib/site'
 import Img from '../components/Img.jsx'
 import ShareBox from '../components/ShareBox.jsx'
+import { Comments, LikeButton } from '../components/SongEngagement.jsx'
+import { canEngage } from '../lib/engagement'
 import TrackCard from '../components/TrackCard.jsx'
 import { ArrowIcon, DownloadIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon, YouTubeIcon } from '../components/Icons.jsx'
 
@@ -44,6 +46,7 @@ export default function Song() {
   const shareUrl = `${window.location.origin}/music/${track.slug}`
   const pct = isCurrent && time.duration ? (time.current / time.duration) * 100 : 0
   const more = tracks.filter((t) => t.sku !== track.sku).slice(0, 8)
+  const social = canEngage(track)
 
   return (
     <div className="song-page">
@@ -69,6 +72,7 @@ export default function Song() {
                 <button className="btn btn-primary song-play-wide" onClick={() => play(track)}>
                   <YouTubeIcon width={20} height={20} /> Watch on YouTube
                 </button>
+                {social && <LikeButton track={track} />}
               </div>
             ) : (
               <>
@@ -103,6 +107,7 @@ export default function Song() {
                   <Link className="icon-btn" to={`/music/${nextTrack.slug}`} state={{ autoplay: isPlaying }} aria-label={`Next: ${nextTrack.title}`}>
                     <NextIcon />
                   </Link>
+                  {social && <LikeButton track={track} />}
                   {track.can_download && (
                     <button className="btn btn-ghost btn-sm song-download" onClick={() => download(track)}>
                       <DownloadIcon width={18} height={18} /> Download
@@ -115,6 +120,8 @@ export default function Song() {
             <ShareBox url={shareUrl} title={`${track.title} — Ricky Password`} text={`Listen to "${track.title}" by Ricky Password 🎶`} />
           </div>
         </div>
+
+        {social && <Comments track={track} />}
 
         {more.length > 0 && (
           <section className="section">
