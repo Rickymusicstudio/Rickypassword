@@ -1,9 +1,13 @@
 {
   "rewrites": [
-    { "source": "/og/news/:slug.html", "destination": "/og/news/:slug.html" },
-
-    { "source": "/n/:slug", "destination": "/api/og/:slug" },
-
+    {
+      "source": "/og/news/:slug.html",
+      "destination": "/og/news/:slug.html"
+    },
+    {
+      "source": "/n/:slug",
+      "destination": "/api/og?slug=:slug"
+    },
     {
       "source": "/news/:slug",
       "has": [
@@ -13,9 +17,8 @@
           "value": "(?i).*(WhatsApp|facebookexternalhit|TwitterBot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Pinterest|redditbot|crawler|bot).*"
         }
       ],
-      "destination": "/api/og/:slug"
+      "destination": "/api/og?slug=:slug"
     },
-
     {
       "source": "/music/:slug",
       "has": [
@@ -25,13 +28,19 @@
           "value": "(?i).*(WhatsApp|facebookexternalhit|TwitterBot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Pinterest|redditbot|crawler|bot).*"
         }
       ],
-      "destination": "/api/og/:slug?type=song"
+      "destination": "/api/og?slug=:slug&type=song"
     },
-
-    { "source": "/news.json", "destination": "/news.json" },
-    { "source": "/api/og/:slug", "destination": "/api/og/:slug" },
-    { "source": "/api/:path*", "destination": "https://rickypassword.onrender.com/api/:path*" },
-
-    { "source": "/((?!api/|og/).*)", "destination": "/" }
+    {
+      "source": "/news.json",
+      "destination": "/news.json"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://rickypassword.onrender.com/api/:path*"
+    },
+    {
+      "source": "/((?!api/|og/).*)",
+      "destination": "/"
+    }
   ]
 }
