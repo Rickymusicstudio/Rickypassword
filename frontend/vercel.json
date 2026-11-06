@@ -16,6 +16,18 @@
       "destination": "/api/og/:slug"
     },
 
+    {
+      "source": "/music/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(WhatsApp|facebookexternalhit|TwitterBot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Pinterest|redditbot|crawler|bot).*"
+        }
+      ],
+      "destination": "/api/og/:slug?type=song"
+    },
+
     { "source": "/news.json", "destination": "/news.json" },
     { "source": "/api/og/:slug", "destination": "/api/og/:slug" },
     { "source": "/api/:path*", "destination": "https://rickypassword.onrender.com/api/:path*" },

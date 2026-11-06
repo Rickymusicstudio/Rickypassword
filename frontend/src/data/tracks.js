@@ -1,5 +1,6 @@
 // src/data/tracks.js — track normalization shared by the built-in songs.js and the database
 import * as songsModule from './songs'
+import { slugify } from '../lib/site'
 
 // pull songs no matter how it's exported
 function getSongsArray(mod) {
@@ -27,6 +28,7 @@ export function normalizeTrack(x) {
   return {
     sku: x.id ?? x.sku ?? x.title,
     title: x.title ?? '',
+    slug: slugify(x.title ?? ''),
     cover_url: x.cover_url ?? x.cover ?? '/covers/star_cover.jpg',
     released_at: x.released_at ?? x.release_date ?? null,
     media_path: audio,

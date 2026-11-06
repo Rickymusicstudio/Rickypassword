@@ -14,6 +14,14 @@ export const NAV_ITEMS = [
   { to: '/contact', label: 'Contact' },
 ]
 
+/** URL-friendly name: "NDAHITA (feat. X)" -> "ndahita-feat-x" */
+export const slugify = (s = '') =>
+  s.toLowerCase()
+    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80)
+
 export const fmtDate = (d, opts = { month: 'short', day: 'numeric', year: 'numeric' }) => {
   if (!d) return ''
   const date = new Date(d)
