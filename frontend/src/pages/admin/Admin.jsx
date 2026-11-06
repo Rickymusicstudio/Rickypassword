@@ -6,6 +6,7 @@ import { isAdmin, signOut } from './adminApi'
 import MusicTab from './MusicTab.jsx'
 import NewsTab from './NewsTab.jsx'
 import GalleryTab from './GalleryTab.jsx'
+import CommentsTab from './CommentsTab.jsx'
 import { importLegacy } from './legacyImport'
 import './admin.css'
 
@@ -13,6 +14,7 @@ const TABS = [
   { key: 'music', label: 'Music', Component: MusicTab },
   { key: 'news', label: 'News', Component: NewsTab },
   { key: 'gallery', label: 'Gallery', Component: GalleryTab },
+  { key: 'comments', label: 'Comments', Component: CommentsTab },
 ]
 
 export function NotConfigured() {
