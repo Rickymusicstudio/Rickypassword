@@ -9,6 +9,7 @@ import sharp from 'sharp'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const IMG = /\.(jpe?g|png)$/i
+const SHARE = /-og\.jpg$/i // generated share images; never treated as originals
 
 const jobs = [
   { dir: 'public/covers', width: 640, quality: 78 },
@@ -23,13 +24,23 @@ let made = 0, saved = 0
 for (const { dir, width, quality } of jobs) {
   const abs = path.join(root, dir)
   for (const name of await readdir(abs)) {
-    if (!IMG.test(name)) continue
+    if (!IMG.test(name) || SHARE.test(name)) continue
     const src = path.join(abs, name)
     const out = path.join(abs, name.replace(IMG, '-sm.webp'))
     const srcTime = await exists(src)
     if ((await exists(out)) >= srcTime) continue
     const info = await sharp(src).rotate().resize({ width, withoutEnlargement: true }).webp({ quality }).toFile(out)
     made++; saved += (await stat(src)).size - info.size
+  }
+  // Small JPEG share image ("<name>-og.jpg"): WhatsApp skips large or WebP preview images
+  for (const name of await readdir(abs)) {
+    if (!IMG.test(name) || SHARE.test(name)) continue
+    const src = path.join(abs, name)
+    const out = path.join(abs, name.replace(IMG, '-og.jpg'))
+    if ((await exists(out)) >= (await exists(src))) continue
+    await sharp(src).rotate().resize({ width: 800, height: 800, fit: 'inside', withoutEnlargement: true })
+      .flatten({ background: '#0d0c0a' }).jpeg({ quality: 78, mozjpeg: true }).toFile(out)
+    made++
   }
 }
 

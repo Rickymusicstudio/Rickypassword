@@ -1,8 +1,8 @@
 /* global process */
-// api/og/[slug].js — Vercel function: share preview (Open Graph) page for a news article or a song.
+// api/og.js — Vercel function: share preview (Open Graph) page for a news article or a song.
 // WhatsApp/Facebook/X bots are routed here by vercel.json (?type=song for /music/:slug);
 // people are redirected to the real page. Reads from Supabase; news falls back to /og/news/.
-import { slugify } from '../../src/lib/site.js'
+import { slugify } from '../src/lib/site.js'
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
@@ -11,6 +11,8 @@ function siteOf(req) {
   const host = req.headers?.['x-forwarded-host'] || req.headers?.host
   return host ? `https://${String(host).split(',')[0].trim()}` : 'https://rickypassword.vercel.app'
 }
+// Built-in covers/photos have a small "<name>-og.jpg" twin (npm run images); WhatsApp skips big images.
+const shareImage = (u) => (u && /^\/(covers|gallery)\/[^?]+\.(jpe?g|png)$/i.test(u) ? u.replace(/\.(jpe?g|png)$/i, '-og.jpg') : u)
 const abs = (site, u) => (!u ? '' : /^https?:\/\//i.test(u) ? u : site + (u.startsWith('/') ? '' : '/') + encodeURI(u))
 
 async function rest(query) {
@@ -44,7 +46,7 @@ export default async function handler(req, res) {
 
   const site = siteOf(req)
   const page = site + item.path
-  const img = abs(site, item.image)
+  const img = abs(site, shareImage(item.image))
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8')
   res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400')
